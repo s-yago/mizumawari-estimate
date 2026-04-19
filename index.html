@@ -99,7 +99,7 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
 
       <div class="base-pack">
         <div class="base-pack-title">基本パック（ベース金額）</div>
-        <div class="base-pack-amount">3,300,000 円</div>
+        <div class="base-pack-amount" id="basePackAmount">3,100,000 円</div>
         <div class="base-pack-note">水回り設備4点（UB・キッチン・洗面台・トイレ）、床CF、ハウスクリーニング込み（諸経費込）</div>
       </div>
 
@@ -125,11 +125,12 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
     </div>
 
     <div class="totals">
-      <div class="total-row"><span>ベース工事費</span><span>3,300,000 円</span></div>
+      <div class="total-row"><span>ベース工事費（パック価格）</span><span id="t-base">3,100,000 円</span></div>
       <div class="total-row"><span>不要設備 差し引き</span><span class="red" id="t-deduct">0 円</span></div>
+      <div class="total-row"><span>パック割引解消（ペナルティ）</span><span class="red" id="t-penalty">0 円</span></div>
       <div class="total-row"><span>追加オプション工事費</span><span class="blue" id="t-add">0 円</span></div>
       <div class="total-row"><span>想定外補修費用（30%）</span><span id="t-buf">0 円</span></div>
-      <div class="total-row main"><span>概算総額（税込）</span><span class="amt" id="t-total">3,300,000 円</span></div>
+      <div class="total-row main"><span>概算総額（税込）</span><span class="amt" id="t-total">3,100,000 円</span></div>
     </div>
 
     <button class="btn-estimate" onclick="goToEstimate()">見積書を作成する →</button>
@@ -145,15 +146,28 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
 </div>
 
 <script>
-const BASE = 3300000;
-let currentTab = 'mansion';
+// ─── 設定値 ───────────────────────────────────────────────
+const CONFIG = {
+  mansion: { listPrice: 3300000, packDiscount: 200000 },
+  kodate:  { listPrice: 3200000, packDiscount: 200000 },
+};
+// ペナルティ：除外点数→割引解消額
+const PENALTY = { 0: 0, 1: 100000, 2: 200000 };
 
+// 減額データ（税抜）  mansion/kodate で金額が異なる場合は別指定
 const deductData = [
-  {id:'ub', label:'ユニットバス（1坪タイプ）', price:800000},
-  {id:'kt', label:'キッチン（2.5m幅）', price:700000},
-  {id:'ws', label:'洗面台', price:100000},
-  {id:'tl', label:'トイレ（1か所）', price:150000},
+  { id:'ub', label:'ユニットバス（リラクシア）',   mansion:1139000, kodate:1019000, tag:'UB' },
+  { id:'kt', label:'キッチン（グレーシア）',        mansion: 774200, kodate: 774200, tag:'K'  },
+  { id:'tl', label:'トイレ（ウォシュレット）',       mansion: 209000, kodate: 209000, tag:'T'  },
+  { id:'ws', label:'洗面台（オンディーヌ）',        mansion: 208000, kodate: 208000, tag:'S'  },
 ];
+
+// 洗面CF：S と UB 両方除外時のみ減額
+const CF_PRICE = { mansion: 42000, kodate: 42000 };
+
+let currentTab = 'mansion';
+function getConfig(){ return CONFIG[currentTab]; }
+function getBase(){ return getConfig().listPrice - getConfig().packDiscount; }
 
 const addData = [
   {group:'壁紙張り替え', items:[
@@ -190,6 +204,12 @@ const addData = [
     {id:'o05', label:'コンセント移設・増設', price:40000, qty:true, unit:'箇所'},
     {id:'o06', label:'IHコンロ設置', price:50000, qty:false},
   ]},
+  {group:'キッチンオプション', items:[
+    {id:'p01', label:'ビルトイン食洗機 設置（キッチン標準仕様に含まれないため）', price:150000, qty:false},
+  ]},
+  {group:'ユニットバスオプション', items:[
+    {id:'p02', label:'浴室暖房乾燥機 設置（UB標準仕様に含まれないため）', price:100000, qty:false},
+  ]},
 ];
 
 const kodateData = [
@@ -202,13 +222,15 @@ const OTHER_COUNT = 5;
 function fmt(n){ return n.toLocaleString('ja-JP'); }
 
 function buildDeductItems(){
-  document.getElementById('deductItems').innerHTML = deductData.map(d=>
-    '<div class="item-row">' +
-    '<input type="checkbox" id="d_'+d.id+'" onchange="recalc()">' +
-    '<label class="item-label" for="d_'+d.id+'">'+d.label+'</label>' +
-    '<span class="item-price red">－'+fmt(d.price)+' 円</span>' +
-    '</div>'
-  ).join('');
+  var tab = currentTab;
+  document.getElementById('deductItems').innerHTML = deductData.map(d=>{
+    var price = d[tab];
+    return '<div class="item-row">' +
+      '<input type="checkbox" id="d_'+d.id+'" onchange="recalc()">' +
+      '<label class="item-label" for="d_'+d.id+'">'+d.label+'</label>' +
+      '<span class="item-price red">－'+fmt(price)+' 円</span>' +
+      '</div>';
+  }).join('');
 }
 
 function buildAddItems(){
@@ -259,6 +281,7 @@ function setTab(tab){
   if(tab==='mansion'){
     kodateData.forEach(function(d){ var el=document.getElementById('k_'+d.id); if(el) el.checked=false; });
   }
+  buildDeductItems(); // 減額金額をタブに合わせて更新
   recalc();
 }
 
@@ -270,20 +293,53 @@ function getNum(id, def){
 }
 
 function recalc(){
-  var deduct=0, add=0;
-  deductData.forEach(function(d){ var el=document.getElementById('d_'+d.id); if(el&&el.checked) deduct+=d.price; });
+  var cfg = getConfig();
+  var tab = currentTab;
+  var packBase = cfg.listPrice - cfg.packDiscount; // パック価格（定価－割引）
+
+  // 除外設備の集計
+  var deduct = 0;
+  var excludeCount = 0;
+  var ubChecked = false, wsChecked = false;
+  deductData.forEach(function(d){
+    var el = document.getElementById('d_'+d.id);
+    if(el && el.checked){
+      deduct += d[tab];
+      excludeCount++;
+      if(d.id==='ub') ubChecked = true;
+      if(d.id==='ws') wsChecked = true;
+    }
+  });
+  // 洗面CF：S＋UB両方除外時のみ減額
+  var cfDeduct = (ubChecked && wsChecked) ? CF_PRICE[tab] : 0;
+  deduct += cfDeduct;
+
+  // ペナルティ（パック割引解消）
+  var penaltyCount = Math.min(excludeCount, 2);
+  var penalty = PENALTY[penaltyCount];
+
+  // 追加オプション
+  var add = 0;
   addData.forEach(function(g){ g.items.forEach(function(d){
-    var el=document.getElementById('a_'+d.id);
-    if(el&&el.checked){ var q=d.qty?Math.max(1,getNum('q_'+d.id,1)):1; add+=d.price*q; }
+    var el = document.getElementById('a_'+d.id);
+    if(el && el.checked){ var q = d.qty ? Math.max(1, getNum('q_'+d.id,1)) : 1; add += d.price*q; }
   }); });
   if(currentTab==='kodate'){
     kodateData.forEach(function(d){ var el=document.getElementById('k_'+d.id); if(el&&el.checked) add+=d.price; });
   }
-  for(var i=1;i<=OTHER_COUNT;i++){ var el=document.getElementById('ot_'+i); if(el&&el.checked) add+=getNum('oprice_'+i,0); }
-  var net=BASE-deduct+add;
-  var buf=Math.round(net*0.3);
-  var total=net+buf;
-  document.getElementById('t-deduct').textContent = deduct>0 ? '－'+fmt(deduct)+' 円' : '0 円';
+  for(var i=1;i<=OTHER_COUNT;i++){
+    var el=document.getElementById('ot_'+i); if(el&&el.checked) add+=getNum('oprice_'+i,0);
+  }
+
+  var net = packBase - deduct + penalty + add;
+  var buf = Math.round(net * 0.3);
+  var total = net + buf;
+
+  // ヘッダー表示更新
+  document.getElementById('basePackAmount').textContent = fmt(packBase)+' 円';
+  document.getElementById('t-base').textContent = fmt(packBase)+' 円';
+  document.getElementById('t-deduct').textContent = deduct > 0 ? '－'+fmt(deduct)+' 円' : '0 円';
+  document.getElementById('t-penalty').textContent = penalty > 0 ? '+'+fmt(penalty)+' 円（'+penaltyCount+'点除外）' : '0 円';
   document.getElementById('t-add').textContent = fmt(add)+' 円';
   document.getElementById('t-buf').textContent = fmt(buf)+' 円';
   document.getElementById('t-total').textContent = fmt(total)+' 円';
@@ -300,54 +356,96 @@ function goToEstimate(){
   var addr = document.getElementById('address').value;
   var today = new Date().toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'});
   var type = currentTab==='kodate' ? '戸建て' : 'マンション';
+  var cfg = getConfig();
+  var tab = currentTab;
+  var packBase = cfg.listPrice - cfg.packDiscount;
 
   var rows = '';
-  var deductTotal=0, addTotal=0;
+  var deductTotal=0, addTotal=0, penaltyTotal=0;
 
-  function tr(label,qty,unit,price,sub,isDed){
-    var col = isDed ? 'color:#A32D2D' : '';
-    var sign = isDed ? '－' : '';
+  function tr(label,qty,unit,price,sub,isDed,isWarn){
+    var col = isDed ? 'color:#A32D2D' : (isWarn ? 'color:#B07000' : '');
+    var sign = isDed ? '－' : (isWarn ? '+' : '');
     rows += '<tr><td>'+label+'</td><td>'+qty+'</td><td>'+unit+'</td><td>'+sign+fmt(price)+' 円</td><td style="'+col+'">'+sign+fmt(sub)+' 円</td></tr>';
   }
 
-  rows += '<tr class="sec"><td colspan="5">■ 基本パック工事</td></tr>';
-  rows += '<tr><td>水回り4点・床CF・ハウスクリーニング（諸経費込）</td><td>1</td><td>式</td><td>'+fmt(BASE)+' 円</td><td>'+fmt(BASE)+' 円</td></tr>';
+  // 基本パック
+  rows += '<tr class="sec"><td colspan="5">■ 基本パック工事（'+fmt(cfg.listPrice)+'円 ー パック割引'+fmt(cfg.packDiscount)+'円）</td></tr>';
+  rows += '<tr><td>水回り4点・床CF・ハウスクリーニング（諸経費込）</td><td>1</td><td>式</td><td>'+fmt(packBase)+' 円</td><td>'+fmt(packBase)+' 円</td></tr>';
 
-  var hd=false;
-  deductData.forEach(function(d){ var el=document.getElementById('d_'+d.id); if(el&&el.checked){
-    if(!hd){ rows+='<tr class="sec"><td colspan="5">■ 基本パックから除く設備（減額）</td></tr>'; hd=true; }
-    tr(d.label,1,'式',d.price,d.price,true); deductTotal+=d.price;
-  }});
+  // 除外設備
+  var excludeCount = 0;
+  var ubChecked = false, wsChecked = false;
+  deductData.forEach(function(d){
+    var el = document.getElementById('d_'+d.id);
+    if(el && el.checked){
+      excludeCount++;
+      if(d.id==='ub') ubChecked = true;
+      if(d.id==='ws') wsChecked = true;
+    }
+  });
+  var hd = false;
+  deductData.forEach(function(d){
+    var el = document.getElementById('d_'+d.id);
+    if(el && el.checked){
+      if(!hd){ rows+='<tr class="sec"><td colspan="5">■ 基本パックから除く設備（減額）</td></tr>'; hd=true; }
+      tr(d.label,1,'式',d[tab],d[tab],true,false); deductTotal+=d[tab];
+    }
+  });
+  // 洗面CF
+  if(ubChecked && wsChecked){
+    var cfp = CF_PRICE[tab];
+    tr('洗面CF貼り替え（S＋UB同時除外による減額）',1,'式',cfp,cfp,true,false);
+    deductTotal += cfp;
+  }
 
+  // ペナルティ
+  var penaltyCount = Math.min(excludeCount, 2);
+  var penalty = PENALTY[penaltyCount];
+  if(penalty > 0){
+    rows += '<tr class="sec"><td colspan="5">■ パック割引解消（除外点数：'+excludeCount+'点）</td></tr>';
+    var penLabel = excludeCount===1
+      ? 'パック割引 一部解消（1点除外により▲20万→▲10万へ変更）'
+      : 'パック割引 全額解消（2点以上除外のため割引消滅）';
+    tr(penLabel,1,'式',penalty,penalty,false,true);
+    penaltyTotal = penalty;
+  }
+
+  // 追加工事
   var addH={};
-  addData.forEach(function(g){ g.items.forEach(function(d){ var el=document.getElementById('a_'+d.id); if(el&&el.checked){
-    if(!addH[g.group]){ rows+='<tr class="sec"><td colspan="5">■ 追加工事：'+g.group+'</td></tr>'; addH[g.group]=true; }
-    var q=d.qty?Math.max(1,getNum('q_'+d.id,1)):1;
-    var sub=d.price*q;
-    tr(d.label,q,d.unit||'部屋',d.price,sub,false); addTotal+=sub;
-  }}); });
+  addData.forEach(function(g){ g.items.forEach(function(d){
+    var el=document.getElementById('a_'+d.id); if(el&&el.checked){
+      if(!addH[g.group]){ rows+='<tr class="sec"><td colspan="5">■ 追加工事：'+g.group+'</td></tr>'; addH[g.group]=true; }
+      var q=d.qty?Math.max(1,getNum('q_'+d.id,1)):1;
+      var sub=d.price*q;
+      tr(d.label,q,d.unit||'部屋',d.price,sub,false,false); addTotal+=sub;
+    }
+  }); });
 
   if(currentTab==='kodate'){
     var hk=false;
     kodateData.forEach(function(d){ var el=document.getElementById('k_'+d.id); if(el&&el.checked){
       if(!hk){ rows+='<tr class="sec"><td colspan="5">■ 戸建て専用工事</td></tr>'; hk=true; }
-      tr(d.label,1,'式',d.price,d.price,false); addTotal+=d.price;
+      tr(d.label,1,'式',d.price,d.price,false,false); addTotal+=d.price;
     }});
   }
 
   var ho=false;
-  for(var i=1;i<=OTHER_COUNT;i++){ var oel=document.getElementById('ot_'+i); if(oel&&oel.checked){
-    var nm=document.getElementById('oname_'+i).value||('その他工事'+i);
-    var pr=getNum('oprice_'+i,0);
-    if(!ho){ rows+='<tr class="sec"><td colspan="5">■ その他工事</td></tr>'; ho=true; }
-    tr(nm,1,'式',pr,pr,false); addTotal+=pr;
-  }}
+  for(var i=1;i<=OTHER_COUNT;i++){
+    var oel=document.getElementById('ot_'+i); if(oel&&oel.checked){
+      var nm=document.getElementById('oname_'+i).value||('その他工事'+i);
+      var pr=getNum('oprice_'+i,0);
+      if(!ho){ rows+='<tr class="sec"><td colspan="5">■ その他工事</td></tr>'; ho=true; }
+      tr(nm,1,'式',pr,pr,false,false); addTotal+=pr;
+    }
+  }
 
-  var net=BASE-deductTotal+addTotal;
-  var buf=Math.round(net*0.3);
-  var total=net+buf;
+  var net = packBase - deductTotal + penaltyTotal + addTotal;
+  var buf = Math.round(net*0.3);
+  var total = net+buf;
 
   var notes='<p>建物の状況によって追加工事が必要になる場合があります。</p><p>電気温水器・エコキュート（370ℓ）使用の場合、約20万円の追加費用が発生します。</p>';
+  if(excludeCount>0) notes+='<p>設備除外によりパック割引の一部または全部が解消されています。詳細は担当スタッフにご確認ください。</p>';
   if(currentTab==='mansion') notes+='<p>マンションでのフローリング張替は、管理規約によりLL-45等級以上の防音フローリングが義務付けられている場合があり、別途費用がかかる場合があります。</p>';
 
   document.getElementById('estimateHTML').innerHTML =
