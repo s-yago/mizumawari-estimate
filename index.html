@@ -165,16 +165,59 @@ const deductData = [
 // 洗面CF：S と UB 両方除外時のみ減額
 const CF_PRICE = { mansion: 42000, kodate: 42000 };
 
-let currentTab = 'mansion';
+// 基本パック工事明細（カテゴリ別・除外タグ付き）
+const packDetail = [
+  { cat:'解体工事', items:[
+    { label:'浴室解体工事',       mansion:150000, kodate:150000, tag:'UB' },
+    { label:'キッチン解体工事',   mansion:130000, kodate:130000, tag:'K'  },
+    { label:'既存トイレ撤去処分', mansion: 10000, kodate: 10000, tag:'T'  },
+    { label:'既存洗面台撤去処分', mansion: 14000, kodate: 14000, tag:'S'  },
+    { label:'廃材処分費',         mansion:100000, kodate:100000, tag:'固定'},
+    { label:'現場養生費',         mansion: 50000, kodate: 50000, tag:'固定'},
+    { label:'資材等運搬費用',     mansion: 70000, kodate: 70000, tag:'固定'},
+  ]},
+  { cat:'大工・配管工事', items:[
+    { label:'キッチンボード復旧工事', mansion: 50000, kodate: 50000, tag:'K'  },
+    { label:'浴室壁復旧工事',         mansion: 50000, kodate: 50000, tag:'UB' },
+    { label:'浴室抗菌樹脂枠',         mansion: 20000, kodate: 20000, tag:'UB' },
+    { label:'キッチン配管工事',       mansion: 96200, kodate: 96200, tag:'K'  },
+    { label:'浴室配管工事',           mansion:100000, kodate:100000, tag:'UB' },
+    { label:'洗面台配管工事',         mansion: 80000, kodate: 80000, tag:'S'  },
+    { label:'トイレ脱着工事',         mansion: 50000, kodate: 50000, tag:'T'  },
+    { label:'循環配管工事',           mansion: 30000, kodate: 30000, tag:'UB' },
+  ]},
+  { cat:'電気工事', items:[
+    { label:'給湯器接続工事',     mansion: 20000, kodate: 20000, tag:'固定'},
+    { label:'電気設備脱着工事',   mansion:100000, kodate:100000, tag:'固定'},
+  ]},
+  { cat:'内装工事', items:[
+    { label:'洗面室クロス貼り換え', mansion: 50000, kodate: 50000, tag:'UB'    },
+    { label:'洗面CF貼り替え',       mansion: 42000, kodate: 42000, tag:'SandUB'},
+    { label:'トイレCF貼り替え',     mansion: 36000, kodate: 36000, tag:'T'     },
+  ]},
+  { cat:'設備工事', items:[
+    { label:'システムキッチン グレーシア',  mansion:498000, kodate:498000, tag:'K'  },
+    { label:'システムバス リラクシア',      mansion:697000, kodate:577000, tag:'UB' },
+    { label:'TOTOトイレ ウォシュレット',    mansion:113000, kodate:113000, tag:'T'  },
+    { label:'洗面化粧台 オンディーヌ',      mansion: 72000, kodate: 72000, tag:'S'  },
+  ]},
+  { cat:'その他・諸経費', items:[
+    { label:'室内クリーニング', mansion: 50000, kodate: 79100, tag:'固定'},
+    { label:'事務所経費',       mansion: 60000, kodate: 60000, tag:'固定'},
+    { label:'現場管理費',       mansion: 80000, kodate: 80000, tag:'固定'},
+  ]},
+];
+
+
 function getConfig(){ return CONFIG[currentTab]; }
 function getBase(){ return getConfig().listPrice - getConfig().packDiscount; }
 
 const addData = [
   {group:'壁紙張り替え', items:[
-    {id:'w01', label:'洗面所の壁紙の張替え', price:50000, qty:false},
-    {id:'w02', label:'キッチンの壁紙の張替え', price:80000, qty:false},
+    {id:'w01', label:'洗面所の壁紙の張替え', price:57000, qty:false},
+    {id:'w02', label:'キッチンの壁紙の張替え', price:50000, qty:false},
     {id:'w03', label:'トイレの壁紙の張替え', price:50000, qty:false},
-    {id:'w04', label:'玄関・廊下の壁紙張り替え', price:80000, qty:false},
+    {id:'w04', label:'玄関・廊下の壁紙張り替え（50㎡まで）', price:80000, qty:false},
     {id:'w05', label:'リビング（〜10帖）の壁紙張り替え', price:120000, qty:false},
     {id:'w06', label:'リビング（〜14帖）の壁紙張り替え', price:140000, qty:false},
     {id:'w07', label:'リビング（〜16帖）の壁紙張り替え', price:160000, qty:false},
@@ -184,31 +227,37 @@ const addData = [
     {id:'w11', label:'洋室（〜10帖）の壁紙張り替え', price:120000, qty:true, unit:'部屋'},
     {id:'w12', label:'洋室（〜12帖）の壁紙張り替え', price:140000, qty:true, unit:'部屋'},
   ]},
-  {group:'床張り替え（フローリング）', items:[
-    {id:'f01', label:'キッチンの床の張替え（フローリング）', price:100000, qty:false},
-    {id:'f02', label:'玄関・廊下の床の張替え（フローリング）', price:150000, qty:false},
-    {id:'f03', label:'リビング（〜10帖）の床張替え（フローリング）', price:200000, qty:false},
-    {id:'f04', label:'リビング（〜14帖）の床張替え（フローリング）', price:280000, qty:false},
-    {id:'f05', label:'リビング（〜16帖）の床張替え（フローリング）', price:320000, qty:false},
-    {id:'f06', label:'リビング（〜20帖）の床張替え（フローリング）', price:400000, qty:false},
-    {id:'f07', label:'洋室（〜6帖）の床張替え（フローリング）', price:150000, qty:true, unit:'部屋'},
-    {id:'f08', label:'洋室（〜8帖）の床張替え（フローリング）', price:200000, qty:true, unit:'部屋'},
-    {id:'f09', label:'洋室（〜10帖）の床張替え（フローリング）', price:250000, qty:true, unit:'部屋'},
-    {id:'f10', label:'洋室（〜12帖）の床張替え（フローリング）', price:300000, qty:true, unit:'部屋'},
+  {group:'床張り替え（フロアタイル上貼り）※フローリング希望は別途見積り', items:[
+    {id:'f01', label:'キッチンの床の上貼り', price:100000, qty:false},
+    {id:'f02', label:'玄関・廊下の床の上貼り（12㎡まで）', price:150000, qty:false},
+    {id:'f03', label:'リビング（〜10帖）の上貼り', price:250000, qty:false},
+    {id:'f04', label:'リビング（〜14帖）の上貼り', price:350000, qty:false},
+    {id:'f05', label:'リビング（〜16帖）の上貼り', price:400000, qty:false},
+    {id:'f06', label:'リビング（〜20帖）の上貼り', price:500000, qty:false},
+    {id:'f07', label:'洋室（〜6帖）の上貼り', price:150000, qty:true, unit:'部屋'},
+    {id:'f08', label:'洋室（〜8帖）の上貼り', price:200000, qty:true, unit:'部屋'},
+    {id:'f09', label:'洋室（〜10帖）の上貼り', price:250000, qty:true, unit:'部屋'},
+    {id:'f10', label:'洋室（〜12帖）の上貼り', price:300000, qty:true, unit:'部屋'},
   ]},
   {group:'その他オプション', items:[
-    {id:'o01', label:'内窓の設置', price:70000, qty:true, unit:'箇所'},
-    {id:'o02', label:'カーテンの設置', price:40000, qty:true, unit:'箇所'},
-    {id:'o03', label:'カーテンレールの設置', price:20000, qty:true, unit:'箇所'},
-    {id:'o04', label:'玄関収納棚の設置', price:80000, qty:false},
-    {id:'o05', label:'コンセント移設・増設', price:40000, qty:true, unit:'箇所'},
-    {id:'o06', label:'IHコンロ設置', price:50000, qty:false},
+    {id:'o01a', label:'内窓の設置（大）', price:200000, qty:true, unit:'箇所'},
+    {id:'o01b', label:'内窓の設置（中）', price:120000, qty:true, unit:'箇所'},
+    {id:'o02a', label:'カーテンの設置（大）', price:80000, qty:true, unit:'箇所'},
+    {id:'o02b', label:'カーテンの設置（中）', price:50000, qty:true, unit:'箇所'},
+    {id:'o03',  label:'カーテンレールの設置', price:20000, qty:true, unit:'箇所'},
+    {id:'o04',  label:'玄関収納棚の設置（大）', price:300000, qty:false},
+    {id:'o05a', label:'コンセント移設（※クロス補修が必要な場合は別途見積り）', price:35000, qty:true, unit:'箇所'},
+    {id:'o05b', label:'コンセント増設（※クロス補修が必要な場合は別途見積り）', price:50000, qty:true, unit:'箇所'},
+    {id:'o07',  label:'換気扇交換（洗面室・トイレ）※2又は3室換気の場合は別途見積り', price:35000, qty:true, unit:'箇所'},
   ]},
   {group:'キッチンオプション', items:[
-    {id:'p01', label:'ビルトイン食洗機 設置（キッチン標準仕様に含まれないため）', price:150000, qty:false},
+    {id:'p01', label:'キッチン IHコンロ設置（※ブレーカー増設の場合は別途見積り）', price:60000, qty:false},
+    {id:'p02', label:'キッチン ビルトイン食洗機（キッチン交換時のみ）', price:150000, qty:false},
+    {id:'p03', label:'キッチン 吊戸棚', price:80000, qty:false},
+    {id:'p04', label:'キッチン キャビネット（W1800タイプ）', price:350000, qty:false},
   ]},
   {group:'ユニットバスオプション', items:[
-    {id:'p02', label:'浴室暖房乾燥機 設置（UB標準仕様に含まれないため）', price:100000, qty:false},
+    {id:'p05', label:'浴室暖房乾燥機（UB交換時のみ）', price:200000, qty:false},
   ]},
 ];
 
@@ -369,20 +418,49 @@ function goToEstimate(){
     rows += '<tr><td>'+label+'</td><td>'+qty+'</td><td>'+unit+'</td><td>'+sign+fmt(price)+' 円</td><td style="'+col+'">'+sign+fmt(sub)+' 円</td></tr>';
   }
 
-  // 基本パック
-  rows += '<tr class="sec"><td colspan="5">■ 基本パック工事（'+fmt(cfg.listPrice)+'円 ー パック割引'+fmt(cfg.packDiscount)+'円）</td></tr>';
-  rows += '<tr><td>水回り4点・床CF・ハウスクリーニング（諸経費込）</td><td>1</td><td>式</td><td>'+fmt(packBase)+' 円</td><td>'+fmt(packBase)+' 円</td></tr>';
+  // 基本パック明細（カテゴリ別）
+  // まず除外設備を先読み
+  var _ubChecked = document.getElementById('d_ub') && document.getElementById('d_ub').checked;
+  var _ktChecked = document.getElementById('d_kt') && document.getElementById('d_kt').checked;
+  var _tlChecked = document.getElementById('d_tl') && document.getElementById('d_tl').checked;
+  var _wsChecked = document.getElementById('d_ws') && document.getElementById('d_ws').checked;
+  function isExcluded(tag){
+    if(tag==='固定') return false;
+    if(tag==='UB') return _ubChecked;
+    if(tag==='K')  return _ktChecked;
+    if(tag==='T')  return _tlChecked;
+    if(tag==='S')  return _wsChecked;
+    if(tag==='SandUB') return (_ubChecked && _wsChecked);
+    return false;
+  }
+
+  rows += '<tr class="sec"><td colspan="5">■ 基本パック工事（定価'+fmt(cfg.listPrice)+'円 ー パック割引'+fmt(cfg.packDiscount)+'円）</td></tr>';
+  var packItemTotal = 0;
+  packDetail.forEach(function(cat){
+    var catRows = '';
+    var catTotal = 0;
+    cat.items.forEach(function(item){
+      var price = item[tab];
+      var excluded = isExcluded(item.tag);
+      if(excluded) return; // 除外設備の項目は基本パック明細から非表示
+      catRows += '<tr><td style="padding-left:20px">'+item.label+'</td><td>1</td><td>式</td><td>'+fmt(price)+' 円</td><td>'+fmt(price)+' 円</td></tr>';
+      catTotal += price;
+      packItemTotal += price;
+    });
+    if(catRows){
+      rows += '<tr><td colspan="5" style="padding:4px 10px;background:#f8f8f8;font-size:11px;font-weight:700;color:#185FA5">【'+cat.cat+'】</td></tr>';
+      rows += catRows;
+    }
+  });
+  // パック割引行
+  rows += '<tr style="background:#EBF3FC"><td colspan="4" style="text-align:right;color:#185FA5;font-weight:700">パック特別割引</td><td style="color:#A32D2D;font-weight:700">－'+fmt(cfg.packDiscount)+' 円</td></tr>';
 
   // 除外設備
   var excludeCount = 0;
-  var ubChecked = false, wsChecked = false;
+  var ubChecked = _ubChecked, wsChecked = _wsChecked;
   deductData.forEach(function(d){
     var el = document.getElementById('d_'+d.id);
-    if(el && el.checked){
-      excludeCount++;
-      if(d.id==='ub') ubChecked = true;
-      if(d.id==='ws') wsChecked = true;
-    }
+    if(el && el.checked) excludeCount++;
   });
   var hd = false;
   deductData.forEach(function(d){
