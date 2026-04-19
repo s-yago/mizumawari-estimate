@@ -129,7 +129,10 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
       <div class="total-row"><span>不要設備 差し引き</span><span class="red" id="t-deduct">0 円</span></div>
       <div class="total-row"><span>パック割引解消（ペナルティ）</span><span class="red" id="t-penalty">0 円</span></div>
       <div class="total-row"><span>追加オプション工事費</span><span class="blue" id="t-add">0 円</span></div>
-      <div class="total-row"><span>想定外補修費用（30%）</span><span id="t-buf">0 円</span></div>
+      <div class="total-row">
+        <span>想定外補修費用（<input type="number" id="bufRate" value="30" min="0" max="100" step="5" style="width:48px;font-size:13px;padding:2px 4px;border:1px solid #ddd;border-radius:4px;text-align:center" onchange="recalc()">%）</span>
+        <span id="t-buf">0 円</span>
+      </div>
       <div class="total-row main"><span>概算総額（税込）</span><span class="amt" id="t-total">3,100,000 円</span></div>
     </div>
 
@@ -381,8 +384,9 @@ function recalc(){
     var el=document.getElementById('ot_'+i); if(el&&el.checked) add+=getNum('oprice_'+i,0);
   }
 
+  var bufRate = Math.max(0, getNum('bufRate', 30)) / 100;
   var net = packBase - deduct + penalty + add;
-  var buf = Math.round(net * 0.3);
+  var buf = Math.round(net * bufRate);
   var total = net + buf;
 
   // ヘッダー表示更新
@@ -391,7 +395,9 @@ function recalc(){
   document.getElementById('t-deduct').textContent = deduct > 0 ? '－'+fmt(deduct)+' 円' : '0 円';
   document.getElementById('t-penalty').textContent = penalty > 0 ? '+'+fmt(penalty)+' 円（'+penaltyCount+'点除外）' : '0 円';
   document.getElementById('t-add').textContent = fmt(add)+' 円';
+  var bufRatePct = Math.max(0, getNum('bufRate', 30));
   document.getElementById('t-buf').textContent = fmt(buf)+' 円';
+  // ラベルのパーセント表示はinput要素自体が変わるので不要
   document.getElementById('t-total').textContent = fmt(total)+' 円';
 }
 
@@ -519,13 +525,15 @@ function goToEstimate(){
     }
   }
 
+  var bufRate = Math.max(0, getNum('bufRate', 30)) / 100;
+  var bufRatePct = Math.round(bufRate * 100);
   var net = packBase - deductTotal + penaltyTotal + addTotal;
-  var buf = Math.round(net*0.3);
+  var buf = Math.round(net*bufRate);
   var total = net+buf;
 
   var notes='<p>建物の状況によって追加工事が必要になる場合があります。</p><p>電気温水器・エコキュート（370ℓ）使用の場合、約20万円の追加費用が発生します。</p>';
   if(excludeCount>0) notes+='<p>設備除外によりパック割引の一部または全部が解消されています。詳細は担当スタッフにご確認ください。</p>';
-  if(currentTab==='mansion') notes+='<p>マンションでのフローリング張替は、管理規約によりLL-45等級以上の防音フローリングが義務付けられている場合があり、別途費用がかかる場合があります。</p>';
+  if(currentTab==='mansion') notes+='<p>マンションでのフローリング張替工事は、管理規約によりLL-45等級などの防音フローリングの使用が義務付けられている場合があり、別途工事費用がかかる場合があります。</p>';
 
   document.getElementById('estimateHTML').innerHTML =
     '<div class="est-header">' +
@@ -533,13 +541,13 @@ function goToEstimate(){
     (addr?'<div style="font-size:12px;color:#888;margin-top:4px">'+addr+'</div>':'') +
     '<div style="font-size:12px;color:#888;margin-top:4px">見積日：'+today+'</div>' +
     '<div class="est-total">'+fmt(total)+' 円（税込）</div>' +
-    '<div class="est-note">※ 想定外補修費用（30%）を含む概算金額です</div>' +
+    '<div class="est-note">※ 想定外補修費用（'+bufRatePct+'%）を含む概算金額です</div>' +
     '</div>' +
     '<table class="est-table">' +
     '<thead><tr><th style="width:40%">工事名</th><th style="width:8%">数量</th><th style="width:8%">単位</th><th style="width:20%">単価</th><th style="width:24%">金額</th></tr></thead>' +
     '<tbody>' + rows +
     '<tr class="sub"><td colspan="4" style="text-align:right">小計（補修費前）</td><td>'+fmt(net)+' 円</td></tr>' +
-    '<tr><td colspan="4" style="text-align:right">想定外補修費用（30%）</td><td>'+fmt(buf)+' 円</td></tr>' +
+    '<tr><td colspan="4" style="text-align:right">想定外補修費用（'+bufRatePct+'%）</td><td>'+fmt(buf)+' 円</td></tr>' +
     '<tr class="grand"><td colspan="4" style="text-align:right">概算総額（税込）</td><td>'+fmt(total)+' 円</td></tr>' +
     '</tbody></table>' +
     '<div class="notes">'+notes+'</div>';
