@@ -52,11 +52,19 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
 .btn-print:hover{background:#1b5e20}
 .page{display:none}
 .page.active{display:block}
-.est-header{text-align:center;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:3px solid #185FA5}
-.est-company{font-size:11px;color:#888;margin-bottom:.5rem}
-.est-title{font-size:17px;font-weight:700;margin-bottom:.25rem}
+/* 見積書ヘッダー */
+.est-header{margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:3px solid #185FA5}
+.est-header-top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap}
+.est-company-block{font-size:12px;color:#555;line-height:1.8;text-align:right}
+.est-company-name{font-size:14px;font-weight:700;color:#185FA5}
+.est-client-block{flex:1}
+.est-client-name{font-size:16px;font-weight:700;margin-bottom:4px}
+.est-client-addr{font-size:12px;color:#888}
+.est-center-block{text-align:center;margin:1rem 0 .5rem}
+.est-doc-title{font-size:18px;font-weight:700;letter-spacing:.05em;margin-bottom:.25rem}
 .est-total{font-size:30px;font-weight:700;color:#185FA5;margin:8px 0}
-.est-note{font-size:12px;color:#666}
+.est-meta{font-size:12px;color:#666;display:flex;gap:2rem;justify-content:center;flex-wrap:wrap}
+.est-note{font-size:12px;color:#666;margin-top:4px}
 .est-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:1rem}
 .est-table th{background:#185FA5;color:#fff;padding:8px 10px;text-align:left;font-weight:600}
 .est-table th:not(:first-child){text-align:right}
@@ -69,6 +77,28 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
 .notes{margin-top:1.25rem;font-size:12px;color:#666;line-height:1.8;background:#fffde7;border-radius:6px;padding:.75rem;border:1px solid #fff9c4}
 .notes p{padding-left:1em;text-indent:-1em}
 .notes p::before{content:"※ "}
+@media(max-width:600px){
+  body{padding:.5rem}
+  h1{font-size:15px;padding:.6rem}
+  .tab{font-size:13px;padding:8px 4px}
+  .base-info{grid-template-columns:1fr !important}
+  .item-label{font-size:12px}
+  .item-price{min-width:80px;font-size:11px}
+  .item-qty input{width:38px;font-size:12px}
+  .other-name{font-size:12px}
+  .other-price{width:85px;font-size:12px}
+  .total-row{font-size:12px}
+  .total-row.main{font-size:15px}
+  .est-header-top{flex-direction:column}
+  .est-company-block{text-align:left}
+  .est-total{font-size:22px}
+  .est-table{font-size:11px}
+  .est-table th,.est-table td{padding:4px 6px}
+  .est-meta{gap:1rem;font-size:11px}
+  /* スマホでは表の数量・単位列を非表示 */
+  .est-table th:nth-child(2),.est-table th:nth-child(3),
+  .est-table td:nth-child(2),.est-table td:nth-child(3){display:none}
+}
 @media print{
   .btn-back,.btn-estimate,.btn-print,.tabs-area,.input-area{display:none !important}
   body{background:white;padding:0}
@@ -92,9 +122,10 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
     </div>
 
     <div class="input-area">
-      <div class="base-info">
+      <div class="base-info" style="grid-template-columns:1fr 1fr 1fr">
         <div class="field"><label>お客様名</label><input type="text" id="customerName" placeholder="例：山田 太郎"></div>
-        <div class="field"><label>物件住所（任意）</label><input type="text" id="address" placeholder="例：東京都渋谷区〇〇101号室"></div>
+        <div class="field"><label>物件住所（任意）</label><input type="text" id="address" placeholder="例：富山市〇〇101号室"></div>
+        <div class="field"><label>担当者名</label><input type="text" id="staffName" placeholder="例：鈴木 一郎"></div>
       </div>
 
       <div class="base-pack">
@@ -535,13 +566,40 @@ function goToEstimate(){
   if(excludeCount>0) notes+='<p>設備除外によりパック割引の一部または全部が解消されています。詳細は担当スタッフにご確認ください。</p>';
   if(currentTab==='mansion') notes+='<p>マンションでのフローリング張替工事は、管理規約によりLL-45等級などの防音フローリングの使用が義務付けられている場合があり、別途工事費用がかかる場合があります。</p>';
 
+  var staffName = document.getElementById('staffName').value || '―';
+
+  // 有効期限（発行日から3ヶ月後）
+  var todayDate = new Date();
+  var expDate = new Date(todayDate);
+  expDate.setMonth(expDate.getMonth() + 3);
+  var expStr = expDate.toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'});
+
   document.getElementById('estimateHTML').innerHTML =
     '<div class="est-header">' +
-    '<div class="est-title">'+name+' 様邸（'+type+'）水回りリフォーム 概算お見積もり</div>' +
-    (addr?'<div style="font-size:12px;color:#888;margin-top:4px">'+addr+'</div>':'') +
-    '<div style="font-size:12px;color:#888;margin-top:4px">見積日：'+today+'</div>' +
+    // 上段：お客様情報（左）＋ 会社情報（右）
+    '<div class="est-header-top">' +
+    '<div class="est-client-block">' +
+    '<div class="est-client-name">'+name+' 様</div>' +
+    (addr?'<div class="est-client-addr">'+addr+'</div>':'') +
+    '</div>' +
+    '<div class="est-company-block">' +
+    '<div class="est-company-name">ViVi不動産株式会社</div>' +
+    '<div>〒930-0000　富山市天正寺1076</div>' +
+    '<div>フリーダイヤル：0120-145-151</div>' +
+    '<div>担当：'+staffName+'</div>' +
+    '</div>' +
+    '</div>' +
+    // 中段：タイトル・金額
+    '<div class="est-center-block">' +
+    '<div class="est-doc-title">水回りリフォーム 概算お見積もり（'+type+'）</div>' +
     '<div class="est-total">'+fmt(total)+' 円（税込）</div>' +
     '<div class="est-note">※ 想定外補修費用（'+bufRatePct+'%）を含む概算金額です</div>' +
+    '</div>' +
+    // 下段：メタ情報
+    '<div class="est-meta">' +
+    '<span>見積日：'+today+'</span>' +
+    '<span>有効期限：'+expStr+'まで</span>' +
+    '</div>' +
     '</div>' +
     '<table class="est-table">' +
     '<thead><tr><th style="width:40%">工事名</th><th style="width:8%">数量</th><th style="width:8%">単位</th><th style="width:20%">単価</th><th style="width:24%">金額</th></tr></thead>' +
