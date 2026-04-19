@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>水回りリフォーム見積ツール 営業マニュアル｜ViVi不動産</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans',Arial,sans-serif;font-size:14px;color:#333;background:#f0f4f8;line-height:1.7}
+.wrap{max-width:800px;margin:0 auto;padding:1rem}
+
+/* ヘッダー */
+.site-header{background:#185FA5;color:#fff;padding:1rem 1.5rem;border-radius:10px;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+.site-header h1{font-size:16px;font-weight:700}
+.site-header .sub{font-size:11px;opacity:.8;margin-top:2px}
+.btn-back-tool{background:#fff;color:#185FA5;border:none;border-radius:6px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn-back-tool:hover{background:#e8f0fb}
+
+/* 目次 */
+.toc{background:#fff;border:1px solid #ddd;border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.5rem}
+.toc-title{font-size:12px;font-weight:700;color:#185FA5;margin-bottom:.5rem}
+.toc a{display:block;font-size:13px;color:#185FA5;text-decoration:none;padding:3px 0;border-bottom:1px dotted #eee}
+.toc a:last-child{border-bottom:none}
+.toc a:hover{text-decoration:underline}
+
+/* セクション */
+.section{background:#fff;border-radius:10px;border:1px solid #e0e0e0;margin-bottom:1.5rem;overflow:hidden}
+.section-header{background:#185FA5;color:#fff;padding:.75rem 1.25rem;font-size:15px;font-weight:700}
+.section-body{padding:1.25rem}
+
+h2{font-size:14px;font-weight:700;color:#185FA5;margin:1.2rem 0 .5rem;padding-bottom:.3rem;border-bottom:2px solid #EBF3FC}
+h2:first-child{margin-top:0}
+h3{font-size:13px;font-weight:700;color:#333;margin:.8rem 0 .3rem}
+p{font-size:13px;margin-bottom:.6rem}
+
+/* テーブル */
+table{width:100%;border-collapse:collapse;font-size:12px;margin:.75rem 0}
+th{background:#185FA5;color:#fff;padding:7px 10px;text-align:left}
+td{padding:6px 10px;border-bottom:1px solid #eee}
+tr:nth-child(even) td{background:#f8f8f8}
+.td-red{color:#A32D2D;font-weight:700}
+.td-blue{color:#185FA5;font-weight:700}
+.td-green{color:#2e7d32;font-weight:700}
+
+/* ボックス */
+.box-note{background:#fffde7;border-left:4px solid #f9a825;border-radius:0 6px 6px 0;padding:.75rem 1rem;margin:.75rem 0;font-size:13px;color:#5c4a00}
+.box-warn{background:#fff0f0;border-left:4px solid #c62828;border-radius:0 6px 6px 0;padding:.75rem 1rem;margin:.75rem 0;font-size:13px;color:#7a0000}
+.box-info{background:#EBF3FC;border-left:4px solid #185FA5;border-radius:0 6px 6px 0;padding:.75rem 1rem;margin:.75rem 0;font-size:13px;color:#0d3b6e}
+
+/* トークスクリプト */
+.talk-block{margin:.75rem 0}
+.talk-label{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px 4px 0 0;margin-bottom:0}
+.talk-label.staff{background:#185FA5;color:#fff}
+.talk-label.client{background:#555;color:#fff}
+.talk-body{padding:.75rem 1rem;border-radius:0 6px 6px 6px;font-size:13px;line-height:1.8;white-space:pre-wrap}
+.talk-body.staff{background:#EBF3FC;border:1px solid #B5D4F4}
+.talk-body.client{background:#f5f5f5;border:1px solid #ddd}
+
+/* ステップ */
+.steps{display:flex;flex-direction:column;gap:.5rem;margin:.75rem 0}
+.step{display:flex;gap:.75rem;align-items:flex-start}
+.step-num{background:#185FA5;color:#fff;font-weight:700;font-size:13px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-body{flex:1}
+.step-title{font-weight:700;font-size:13px;color:#185FA5;margin-bottom:2px}
+.step-desc{font-size:12px;color:#555}
+
+/* QA */
+.qa-block{margin:.75rem 0;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden}
+.qa-q{background:#EBF3FC;padding:.6rem 1rem;font-size:13px;font-weight:700;color:#0d3b6e}
+.qa-q::before{content:"Q. "}
+.qa-a{padding:.6rem 1rem;font-size:13px;background:#fff}
+.qa-a::before{content:"A. ";font-weight:700;color:#185FA5}
+
+/* フッター */
+.footer{text-align:center;font-size:11px;color:#888;padding:1.5rem 0 .5rem;border-top:1px solid #ddd;margin-top:1rem}
+
+/* スマホ対応 */
+@media(max-width:600px){
+  .wrap{padding:.5rem}
+  .site-header{padding:.75rem 1rem}
+  .site-header h1{font-size:14px}
+  .section-body{padding:.875rem}
+  table{font-size:11px}
+  th,td{padding:5px 7px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="site-header">
+    <div>
+      <div class="sub">ViVi不動産株式会社 | 社内用マニュアル</div>
+      <h1>📋 水回りリフォーム見積ツール 営業マニュアル</h1>
+    </div>
+    <a class="btn-back-tool" href="index.html">← 見積ツールへ戻る</a>
+  </div>
+
+  <!-- 目次 -->
+  <div class="toc">
+    <div class="toc-title">📌 目次</div>
+    <a href="#ch1">第1章　このツールの目的と位置づけ</a>
+    <a href="#ch2">第2章　基本操作（5ステップ）</a>
+    <a href="#ch3">第3章　設備除外時のルールと計算ロジック</a>
+    <a href="#ch4">第4章　お客様対応トークスクリプト</a>
+    <a href="#ch5">第5章　よくある質問（Q&amp;A）</a>
+  </div>
+
+  <!-- 第1章 -->
+  <div class="section" id="ch1">
+    <div class="section-header">第1章　このツールの目的と位置づけ</div>
+    <div class="section-body">
+
+      <h2>1-1　ツールの目的</h2>
+      <p>本ツールは以下の2つの目的で使用します。</p>
+      <ul style="padding-left:1.2rem;font-size:13px;margin-bottom:.75rem">
+        <li>お客様が水回りリフォームの<strong>予算概算を把握</strong>するため</li>
+        <li>請負契約前の<strong>銀行融資審査</strong>に必要な概算見積書を作成するため</li>
+      </ul>
+
+      <div class="box-warn">
+        ⚠️ <strong>重要：</strong>このツールで作成した見積書は「概算」です。請負契約後に正式な金額を計算します。追加工事がなければ基本的にこの金額で確定となりますが、現地調査の結果、想定外の補修費用が発生する場合があります。
+      </div>
+
+      <h2>1-2　概算見積と正式見積の違い</h2>
+      <table>
+        <tr><th>項目</th><th>概算見積（本ツール）</th><th>正式見積（契約後）</th></tr>
+        <tr><td>タイミング</td><td>契約前・銀行審査時</td><td>現地調査後・請負契約時</td></tr>
+        <tr><td>精度</td><td>概算（想定外費用込み）</td><td>確定金額</td></tr>
+        <tr><td>用途</td><td>予算計画・融資申請</td><td>請負契約・施工</td></tr>
+        <tr><td>想定外費用</td><td>30%バッファ込み</td><td>調査結果を反映</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 第2章 -->
+  <div class="section" id="ch2">
+    <div class="section-header">第2章　基本操作（5ステップ）</div>
+    <div class="section-body">
+
+      <h2>2-1　アクセス方法</h2>
+      <div class="box-info">
+        🔗 <strong>URL：</strong><a href="index.html" style="color:#185FA5">https://s-yago.github.io/mizumawari-estimate/</a><br>
+        スマートフォン・タブレット・PCすべてに対応しています。ホーム画面に追加しておくと商談中にすぐ開けて便利です。
+      </div>
+
+      <h2>2-2　操作手順</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">①</div>
+          <div class="step-body">
+            <div class="step-title">物件タイプを選択</div>
+            <div class="step-desc">画面上部のタブで「マンション」または「戸建て」を選ぶ。パック価格が自動で切り替わります（マンション310万円 / 戸建て300万円）</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">②</div>
+          <div class="step-body">
+            <div class="step-title">基本情報を入力</div>
+            <div class="step-desc">お客様名・物件住所（任意）・担当者名を入力</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">③</div>
+          <div class="step-body">
+            <div class="step-title">除外設備を選択</div>
+            <div class="step-desc">「基本パックから除く設備」でお客様が不要な設備にチェック。減額と割引解消が自動計算されます</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">④</div>
+          <div class="step-body">
+            <div class="step-title">追加工事を選択</div>
+            <div class="step-desc">壁紙・床・オプション等、ご希望の追加工事にチェック。数量入力が必要な項目は箇所数を入力</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">⑤</div>
+          <div class="step-body">
+            <div class="step-title">見積書を作成</div>
+            <div class="step-desc">「見積書を作成する」ボタンを押すと見積書画面へ。印刷またはPDF保存が可能</div>
+          </div>
+        </div>
+      </div>
+
+      <h2>2-3　画面の見方</h2>
+      <h3>■ 基本パック（ベース金額）</h3>
+      <p>マンション：定価330万円 − パック割引20万円 ＝ <strong>310万円</strong></p>
+      <p>戸建て　　：定価320万円 − パック割引20万円 ＝ <strong>300万円</strong></p>
+
+      <h3>■ 予備費（想定外補修費用）</h3>
+      <p>デフォルトは30%です。入力欄の数字を直接変更できます。案件の状況に合わせて調整してください。</p>
+
+      <h3>■ 概算総額の計算式</h3>
+      <div class="box-info">
+        概算総額 ＝（パック価格 − 除外設備減額 ＋ 割引解消額 ＋ 追加工事費）×（1 ＋ 予備費率）
+      </div>
+    </div>
+  </div>
+
+  <!-- 第3章 -->
+  <div class="section" id="ch3">
+    <div class="section-header">第3章　設備除外時のルールと計算ロジック</div>
+    <div class="section-body">
+
+      <h2>3-1　設備除外時の減額金額</h2>
+      <p>設備を除外した場合、以下の金額が見積額から差し引かれます。</p>
+      <table>
+        <tr><th>除外設備</th><th>マンション</th><th>戸建て</th></tr>
+        <tr><td>ユニットバス（タカラスタンダード・リラクシア）</td><td class="td-red">▲1,139,000円</td><td class="td-red">▲1,019,000円</td></tr>
+        <tr><td>キッチン（タカラスタンダード・グレーシア）</td><td class="td-red">▲774,200円</td><td class="td-red">▲774,200円</td></tr>
+        <tr><td>トイレ（TOTO・ウォシュレット）</td><td class="td-red">▲209,000円</td><td class="td-red">▲209,000円</td></tr>
+        <tr><td>洗面台（タカラスタンダード・オンディーヌ）</td><td class="td-red">▲208,000円</td><td class="td-red">▲208,000円</td></tr>
+        <tr><td>洗面CF ※UB＋洗面台の両方除外時のみ</td><td class="td-red">▲42,000円</td><td class="td-red">▲42,000円</td></tr>
+      </table>
+
+      <h2>3-2　パック割引解消（ペナルティ）ルール</h2>
+      <p>設備を除外するとパック割引（20万円）が下記のとおり自動解消されます。</p>
+      <table>
+        <tr><th>除外点数</th><th>割引解消額</th><th>残り割引</th><th>状態</th></tr>
+        <tr><td>0点（4点フルセット）</td><td class="td-green">0円</td><td class="td-green">▲200,000円</td><td>最大割引</td></tr>
+        <tr><td>1点除外（3点施工）</td><td class="td-red">+100,000円</td><td>▲100,000円</td><td>割引半減</td></tr>
+        <tr><td>2点以上除外</td><td class="td-red">+200,000円</td><td class="td-red">0円</td><td>割引消滅</td></tr>
+      </table>
+      <div class="box-note">
+        📌 3点・4点除外は単品注文扱いとなり、パックの対象外となります。
+      </div>
+    </div>
+  </div>
+
+  <!-- 第4章 -->
+  <div class="section" id="ch4">
+    <div class="section-header">第4章　お客様対応トークスクリプト</div>
+    <div class="section-body">
+
+      <h2>4-1　ツールの説明トーク（最初の一言）</h2>
+      <div class="talk-block">
+        <div class="talk-label staff">営業</div>
+        <div class="talk-body staff">○○様、こちらのタブレット（スマホ）でリフォームの概算費用をすぐにお出しできます。
+「マンション」か「戸建て」かを選んで、ご希望の内容にチェックを入れるだけで、銀行の融資審査にも使える概算見積書を作成できます。
+今日その場でお持ち帰りいただけますよ。</div>
+      </div>
+
+      <h2>4-2　概算見積であることの説明トーク</h2>
+      <div class="talk-block">
+        <div class="talk-label staff">営業</div>
+        <div class="talk-body staff">こちらの金額は、あくまでも予算の目安と銀行審査用の概算金額です。
+請負契約のあとに現地をしっかり確認して、正式な金額をお出しします。
+
+追加の工事がなければ基本的にこの金額でご契約となりますが、壁の中や床下など、開けてみて初めてわかる状況によって費用が変わる場合があります。
+そのため、今回は安心のため想定外費用として30%分を上乗せした金額でお出ししています。</div>
+      </div>
+
+      <h2>4-3　設備1点除外時のトーク</h2>
+      <p style="font-size:12px;color:#777;margin-bottom:.5rem">【シーン：お客様から「キッチンはいらない、その分安くして」と言われた場合】</p>
+      <div class="talk-block">
+        <div class="talk-label client">お客様</div>
+        <div class="talk-body client">キッチンはリフォームしなくてもいいんだけど、その分安くなりますよね？</div>
+      </div>
+      <div class="talk-block">
+        <div class="talk-label staff">営業</div>
+        <div class="talk-body staff">はい、キッチンを外す場合は、キッチン分の工事費用 774,200円を全額お値引きします。
+
+ただ、一点ご説明があります。
+今回の「水回り4点パック」は、同じ職人が4つの設備を一度にまとめて工事することで、養生や段取りを1回で済ませられるため、会社から特別に20万円のまとめ割引を適用しています。
+
+キッチンが1点外れますと、この割引がシステム上自動で調整され、20万円の割引が10万円になってしまいます。
+
+結果として、当初のお見積り（300万円）から 674,200円のお値引きとなります。
+「私が値引きを減らしたのではなく、パックのシステム上、割引率が自動で変わってしまう」という仕組みですので、ご理解いただけますと幸いです。</div>
+      </div>
+
+      <h2>4-4　2点以上除外時のトーク</h2>
+      <p style="font-size:12px;color:#777;margin-bottom:.5rem">【シーン：キッチンと洗面台の両方を除外したい場合】</p>
+      <div class="talk-block">
+        <div class="talk-label client">お客様</div>
+        <div class="talk-body client">キッチンと洗面台は外してほしいんですけど。</div>
+      </div>
+      <div class="talk-block">
+        <div class="talk-label staff">営業</div>
+        <div class="talk-body staff">承知しました。キッチン774,200円と洗面台208,000円を合わせて982,200円を減額いたします。
+
+2点以上外れる場合は、まとめ工事の効率が大きく変わるため、システム上パック割引20万円が全額なくなってしまいます。
+
+そのため当初のお見積りから実質782,200円のお値引きとなります。
+2点外してもお得なプランには変わりありませんので、ご安心ください。</div>
+      </div>
+
+      <h2>4-5　予備費について質問されたときのトーク</h2>
+      <div class="talk-block">
+        <div class="talk-label client">お客様</div>
+        <div class="talk-body client">この30%っていうのは何ですか？多くない？</div>
+      </div>
+      <div class="talk-block">
+        <div class="talk-label staff">営業</div>
+        <div class="talk-body staff">ご説明が足りず失礼しました。
+リフォーム工事は、壁を開けたり床をはがしたりすると、図面には載っていない配管の老朽化や、下地の腐食が見つかることがあります。
+
+今回の概算見積は請負契約前の段階ですので、まだ現地を詳しく確認できていません。
+そのため「万が一の際も銀行融資の金額が足りなくならないよう」に、想定外費用として30%を上乗せした金額でお出ししています。
+
+実際に追加費用が発生しなければ、その分はお戻しいたします。また現地確認後の正式見積で、より精度の高い金額をお出しします。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第5章 -->
+  <div class="section" id="ch5">
+    <div class="section-header">第5章　よくある質問（Q&amp;A）</div>
+    <div class="section-body">
+      <div class="qa-block">
+        <div class="qa-q">見積書は印刷できますか？</div>
+        <div class="qa-a">はい。見積書画面の「印刷 / PDF保存」ボタンから印刷またはPDFとして保存できます。商談中にその場でお客様にお渡しください。</div>
+      </div>
+      <div class="qa-block">
+        <div class="qa-q">スマートフォンでも使えますか？</div>
+        <div class="qa-a">はい。スマートフォン・タブレット・PCすべてに対応しています。画面幅に応じて自動的に見やすいレイアウトに切り替わります。</div>
+      </div>
+      <div class="qa-block">
+        <div class="qa-q">予備費の30%は変更できますか？</div>
+        <div class="qa-a">はい。入力画面の概算合計欄にある「30%」の数字を直接変更できます。案件の状況に合わせて調整してください。</div>
+      </div>
+      <div class="qa-block">
+        <div class="qa-q">戸建てとマンションで金額が違うのはなぜですか？</div>
+        <div class="qa-a">ユニットバスの機種（マンション用と戸建て用で価格が異なる）や、クリーニング費用の違いが主な理由です。</div>
+      </div>
+      <div class="qa-block">
+        <div class="qa-q">この見積書は正式な契約書として使えますか？</div>
+        <div class="qa-a">使えません。あくまでも概算見積書です。正式な請負契約は現地調査後に改めてご締結いただきます。</div>
+      </div>
+      <div class="qa-block">
+        <div class="qa-q">追加オプションを選ぶと金額はどう変わりますか？</div>
+        <div class="qa-a">チェックを入れると即座に概算総額に加算されます。数量入力が必要なものは箇所数を入力してください。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    ViVi不動産株式会社　富山市天正寺1076　フリーダイヤル：0120-145-151<br>
+    本マニュアルは社内用資料です。社外への配布はご遠慮ください。
+  </div>
+
+</div>
+</body>
+</html>
