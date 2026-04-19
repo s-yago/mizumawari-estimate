@@ -156,14 +156,18 @@ const PENALTY = { 0: 0, 1: 100000, 2: 200000 };
 
 // 減額データ（税抜）  mansion/kodate で金額が異なる場合は別指定
 const deductData = [
-  { id:'ub', label:'ユニットバス（リラクシア）',   mansion:1139000, kodate:1019000, tag:'UB' },
-  { id:'kt', label:'キッチン（グレーシア）',        mansion: 774200, kodate: 774200, tag:'K'  },
-  { id:'tl', label:'トイレ（ウォシュレット）',       mansion: 209000, kodate: 209000, tag:'T'  },
-  { id:'ws', label:'洗面台（オンディーヌ）',        mansion: 208000, kodate: 208000, tag:'S'  },
+  { id:'ub', label:'ユニットバス（タカラスタンダード・リラクシア）',   mansion:1139000, kodate:1019000, tag:'UB' },
+  { id:'kt', label:'キッチン（タカラスタンダード・グレーシア）',        mansion: 774200, kodate: 774200, tag:'K'  },
+  { id:'tl', label:'トイレ（TOTO・ウォシュレット）',                    mansion: 209000, kodate: 209000, tag:'T'  },
+  { id:'ws', label:'洗面台（タカラスタンダード・オンディーヌ）',        mansion: 208000, kodate: 208000, tag:'S'  },
 ];
 
 // 洗面CF：S と UB 両方除外時のみ減額
 const CF_PRICE = { mansion: 42000, kodate: 42000 };
+
+let currentTab = 'mansion';
+function getConfig(){ return CONFIG[currentTab]; }
+function getBase(){ return getConfig().listPrice - getConfig().packDiscount; }
 
 // 基本パック工事明細（カテゴリ別・除外タグ付き）
 const packDetail = [
@@ -196,10 +200,10 @@ const packDetail = [
     { label:'トイレCF貼り替え',     mansion: 36000, kodate: 36000, tag:'T'     },
   ]},
   { cat:'設備工事', items:[
-    { label:'システムキッチン グレーシア',  mansion:498000, kodate:498000, tag:'K'  },
-    { label:'システムバス リラクシア',      mansion:697000, kodate:577000, tag:'UB' },
-    { label:'TOTOトイレ ウォシュレット',    mansion:113000, kodate:113000, tag:'T'  },
-    { label:'洗面化粧台 オンディーヌ',      mansion: 72000, kodate: 72000, tag:'S'  },
+    { label:'システムキッチン（タカラスタンダード・グレーシア）',  mansion:498000, kodate:498000, tag:'K'  },
+    { label:'システムバス（タカラスタンダード・リラクシア）',      mansion:697000, kodate:577000, tag:'UB' },
+    { label:'トイレ（TOTO・ウォシュレット）',                      mansion:113000, kodate:113000, tag:'T'  },
+    { label:'洗面化粧台（タカラスタンダード・オンディーヌ）',      mansion: 72000, kodate: 72000, tag:'S'  },
   ]},
   { cat:'その他・諸経費', items:[
     { label:'室内クリーニング', mansion: 50000, kodate: 79100, tag:'固定'},
@@ -208,9 +212,6 @@ const packDetail = [
   ]},
 ];
 
-
-function getConfig(){ return CONFIG[currentTab]; }
-function getBase(){ return getConfig().listPrice - getConfig().packDiscount; }
 
 const addData = [
   {group:'壁紙張り替え', items:[
