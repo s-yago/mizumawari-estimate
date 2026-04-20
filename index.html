@@ -77,6 +77,17 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
 .notes{margin-top:1.25rem;font-size:12px;color:#666;line-height:1.8;background:#fffde7;border-radius:6px;padding:.75rem;border:1px solid #fff9c4}
 .notes p{padding-left:1em;text-indent:-1em}
 .notes p::before{content:"※ "}
+/* アコーディオン */
+.accordion{margin-bottom:.5rem;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden}
+.accordion-header{display:flex;justify-content:space-between;align-items:center;padding:.65rem 1rem;background:#f8f9fb;cursor:pointer;user-select:none;font-size:13px;font-weight:700;color:#185FA5}
+.accordion-header:hover{background:#EBF3FC}
+.accordion-arrow{font-size:11px;transition:transform .2s;flex-shrink:0}
+.accordion-header.open .accordion-arrow{transform:rotate(180deg)}
+.accordion-body{display:none;padding:.75rem 1rem;background:#fff;border-top:1px solid #eee}
+.accordion-body.open{display:block}
+/* その他追加ボタン */
+.btn-add-other{width:100%;padding:8px;background:#f0f4f8;color:#185FA5;border:1px dashed #185FA5;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;margin-top:.5rem}
+.btn-add-other:hover{background:#EBF3FC}
 @media(max-width:600px){
   body{padding:.5rem}
   h1{font-size:15px;padding:.6rem}
@@ -95,12 +106,11 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
   .est-table{font-size:11px}
   .est-table th,.est-table td{padding:4px 6px}
   .est-meta{gap:1rem;font-size:11px}
-  /* スマホでは表の数量・単位列を非表示 */
   .est-table th:nth-child(2),.est-table th:nth-child(3),
   .est-table td:nth-child(2),.est-table td:nth-child(3){display:none}
 }
 @media print{
-  .btn-back,.btn-estimate,.btn-print,.tabs-area,.input-area{display:none !important}
+  .btn-back,.btn-estimate,.btn-print,.tabs-area,.input-area,.no-print{display:none !important}
   body{background:white;padding:0}
   .page.active{display:block !important}
   .est-result{display:block !important}
@@ -110,7 +120,7 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
 <body>
 <div class="app">
   <h1>💧 水回りリフォーム 見積もりシステム</h1>
-  <div style="text-align:right;margin-bottom:.75rem">
+  <div class="no-print" style="text-align:right;margin-bottom:.75rem">
     <a href="manual.html" style="display:inline-block;background:#fff;color:#185FA5;border:2px solid #185FA5;border-radius:8px;padding:8px 18px;font-size:13px;font-weight:700;text-decoration:none" target="_blank">📋 営業マニュアルを見る</a>
   </div>
 
@@ -155,6 +165,7 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
       <div class="card">
         <div class="card-title">その他工事（工事名・金額を自由入力）</div>
         <div id="otherItems"></div>
+        <button class="btn-add-other" onclick="addOtherRow()">＋ 項目を追加する</button>
       </div>
     </div>
 
@@ -195,8 +206,8 @@ const PENALTY = { 0: 0, 1: 100000, 2: 200000 };
 const deductData = [
   { id:'ub', label:'ユニットバス（タカラスタンダード・リラクシア）',   mansion:1139000, kodate:1019000, tag:'UB' },
   { id:'kt', label:'キッチン（タカラスタンダード・グレーシア）',        mansion: 774200, kodate: 774200, tag:'K'  },
-  { id:'tl', label:'トイレ（TOTO・ウォシュレット）',                    mansion: 209000, kodate: 209000, tag:'T'  },
-  { id:'ws', label:'洗面台（タカラスタンダード・オンディーヌ）',        mansion: 208000, kodate: 208000, tag:'S'  },
+  { id:'tl', label:'トイレ（TOTO・ウォシュレット付 ZR1）',             mansion: 209000, kodate: 209000, tag:'T'  },
+  { id:'ws', label:'洗面台（タカラスタンダード・リフレシオ）',          mansion: 208000, kodate: 208000, tag:'S'  },
 ];
 
 // 洗面CF：S と UB 両方除外時のみ減額
@@ -239,8 +250,8 @@ const packDetail = [
   { cat:'設備工事', items:[
     { label:'システムキッチン（タカラスタンダード・グレーシア）',  mansion:498000, kodate:498000, tag:'K'  },
     { label:'システムバス（タカラスタンダード・リラクシア）',      mansion:697000, kodate:577000, tag:'UB' },
-    { label:'トイレ（TOTO・ウォシュレット）',                      mansion:113000, kodate:113000, tag:'T'  },
-    { label:'洗面化粧台（タカラスタンダード・オンディーヌ）',      mansion: 72000, kodate: 72000, tag:'S'  },
+    { label:'トイレ（TOTO・ウォシュレット付 ZR1）',                      mansion:113000, kodate:113000, tag:'T'  },
+    { label:'洗面化粧台（タカラスタンダード・リフレシオ）',               mansion: 72000, kodate: 72000, tag:'S'  },
   ]},
   { cat:'その他・諸経費', items:[
     { label:'室内クリーニング', mansion: 50000, kodate: 79100, tag:'固定'},
@@ -296,6 +307,7 @@ const addData = [
   ]},
   {group:'ユニットバスオプション', items:[
     {id:'p05', label:'浴室暖房乾燥機（UB交換時のみ）', price:200000, qty:false},
+    {id:'p06', label:'ユニットバス 1.25坪タイプへ変更（1坪タイプからの差額）', price:50000, qty:false},
   ]},
 ];
 
@@ -303,8 +315,6 @@ const kodateData = [
   {id:'k01', label:'2階トイレ追加工事', price:200000},
   {id:'k02', label:'階段床上貼り工事（CF）', price:70000},
 ];
-
-const OTHER_COUNT = 5;
 
 function fmt(n){ return n.toLocaleString('ja-JP'); }
 
@@ -322,8 +332,8 @@ function buildDeductItems(){
 
 function buildAddItems(){
   document.getElementById('addItems').innerHTML = addData.map(function(g){
-    return '<div><div class="group-label">'+g.group+'</div>' +
-    g.items.map(function(d){
+    var id = 'acc_' + g.group.replace(/[^\w]/g,'_');
+    var itemsHtml = g.items.map(function(d){
       var qtyHtml = d.qty
         ? '<div class="item-qty"><input type="number" id="q_'+d.id+'" value="1" min="1" max="20" onchange="recalc()"><span>'+(d.unit||'部屋')+'</span></div>'
         : '';
@@ -333,8 +343,23 @@ function buildAddItems(){
         '<span class="item-price">'+fmt(d.price)+' 円</span>' +
         qtyHtml +
         '</div>';
-    }).join('') + '</div>';
+    }).join('');
+    return '<div class="accordion">' +
+      '<div class="accordion-header" onclick="toggleAccordion(\''+id+'\')" id="hd_'+id+'">' +
+      g.group +
+      '<span class="accordion-arrow">▼</span>' +
+      '</div>' +
+      '<div class="accordion-body" id="'+id+'">'+itemsHtml+'</div>' +
+      '</div>';
   }).join('');
+}
+
+function toggleAccordion(id){
+  var body = document.getElementById(id);
+  var hd = document.getElementById('hd_'+id);
+  var isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  hd.classList.toggle('open', !isOpen);
 }
 
 function buildKodateItems(){
@@ -347,17 +372,30 @@ function buildKodateItems(){
   ).join('');
 }
 
+let otherCount = 3; // 初期表示件数
+
 function buildOtherItems(){
   var html = '';
-  for(var i=1;i<=OTHER_COUNT;i++){
-    html += '<div class="other-row">' +
-      '<input type="checkbox" id="ot_'+i+'" onchange="recalc()">' +
-      '<input type="text" class="other-name" id="oname_'+i+'" placeholder="工事名を入力">' +
-      '<input type="number" class="other-price" id="oprice_'+i+'" placeholder="金額" value="0" min="0" onchange="recalc()">' +
-      '<span class="other-yen">円</span>' +
-      '</div>';
+  for(var i=1;i<=otherCount;i++){
+    html += makeOtherRow(i);
   }
   document.getElementById('otherItems').innerHTML = html;
+}
+
+function makeOtherRow(i){
+  return '<div class="other-row" id="other-row-'+i+'">' +
+    '<input type="checkbox" id="ot_'+i+'" onchange="recalc()">' +
+    '<input type="text" class="other-name" id="oname_'+i+'" placeholder="工事名を入力">' +
+    '<input type="number" class="other-price" id="oprice_'+i+'" placeholder="金額" value="0" min="0" onchange="recalc()">' +
+    '<span class="other-yen">円</span>' +
+    '</div>';
+}
+
+function addOtherRow(){
+  otherCount++;
+  var div = document.createElement('div');
+  div.innerHTML = makeOtherRow(otherCount);
+  document.getElementById('otherItems').appendChild(div.firstChild);
 }
 
 function setTab(tab){
@@ -414,7 +452,7 @@ function recalc(){
   if(currentTab==='kodate'){
     kodateData.forEach(function(d){ var el=document.getElementById('k_'+d.id); if(el&&el.checked) add+=d.price; });
   }
-  for(var i=1;i<=OTHER_COUNT;i++){
+  for(var i=1;i<=otherCount;i++){
     var el=document.getElementById('ot_'+i); if(el&&el.checked) add+=getNum('oprice_'+i,0);
   }
 
@@ -550,7 +588,7 @@ function goToEstimate(){
   }
 
   var ho=false;
-  for(var i=1;i<=OTHER_COUNT;i++){
+  for(var i=1;i<=otherCount;i++){
     var oel=document.getElementById('ot_'+i); if(oel&&oel.checked){
       var nm=document.getElementById('oname_'+i).value||('その他工事'+i);
       var pr=getNum('oprice_'+i,0);
