@@ -161,7 +161,7 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
     <div class="totals">
       <div class="total-row"><span>ベース工事費（パック価格）</span><span id="t-base">3,100,000 円</span></div>
       <div class="total-row"><span>不要設備 差し引き</span><span class="red" id="t-deduct">0 円</span></div>
-      <div class="total-row"><span>パック割引解消（ペナルティ）</span><span class="red" id="t-penalty">0 円</span></div>
+      <div class="total-row"><span>パック施工割引 調整額</span><span class="red" id="t-penalty">0 円</span></div>
       <div class="total-row"><span>追加オプション工事費</span><span class="blue" id="t-add">0 円</span></div>
       <div class="total-row">
         <span>想定外補修費用（<input type="number" id="bufRate" value="30" min="0" max="100" step="5" style="width:48px;font-size:13px;padding:2px 4px;border:1px solid #ddd;border-radius:4px;text-align:center" onchange="recalc()">%）</span>
@@ -522,10 +522,10 @@ function goToEstimate(){
   var penaltyCount = Math.min(excludeCount, 2);
   var penalty = PENALTY[penaltyCount];
   if(penalty > 0){
-    rows += '<tr class="sec"><td colspan="5">■ パック割引解消（除外点数：'+excludeCount+'点）</td></tr>';
+    rows += '<tr class="sec"><td colspan="5">■ パック施工割引 調整額（除外点数：'+excludeCount+'点）</td></tr>';
     var penLabel = excludeCount===1
-      ? 'パック割引 一部解消（1点除外により▲20万→▲10万へ変更）'
-      : 'パック割引 全額解消（2点以上除外のため割引消滅）';
+      ? 'パック施工割引 調整額（1点除外により▲20万→▲10万へ変更）'
+      : 'パック施工割引 調整額（2点以上除外のため割引消滅）';
     tr(penLabel,1,'式',penalty,penalty,false,true);
     penaltyTotal = penalty;
   }
