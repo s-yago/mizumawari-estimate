@@ -201,6 +201,8 @@ const CONFIG = {
 };
 // ペナルティ：除外点数→割引解消額
 const PENALTY = { 0: 0, 1: 100000, 2: 200000 };
+// 足場設置費用（外壁・屋根塗装のどちらか1つでも選択時に自動加算）
+const SCAFFOLD_PRICE = 440000;
 
 // 減額データ（税抜）  mansion/kodate で金額が異なる場合は別指定
 const deductData = [
@@ -314,6 +316,14 @@ const addData = [
 const kodateData = [
   {id:'k01', label:'2階トイレ追加工事', price:200000},
   {id:'k02', label:'階段床上貼り工事（CF）', price:70000},
+  {id:'e01', label:'外壁塗装（施工面積200㎡まで）', price:1540000},
+  {id:'e02', label:'屋根塗装（施工面積70㎡まで）', price:450000},
+  {id:'e03', label:'カーポート設置（2台分・積雪1.5mタイプ）', price:1100000},
+  {id:'e04', label:'床下白アリ防除施工（施工面積20坪まで）', price:200000},
+];
+// 足場自動加算用IDリスト
+const kodateExteriorData = [
+  {id:'e01'}, {id:'e02'}, {id:'e03'}, {id:'e04'},
 ];
 
 function fmt(n){ return n.toLocaleString('ja-JP'); }
@@ -363,13 +373,15 @@ function toggleAccordion(id){
 }
 
 function buildKodateItems(){
-  document.getElementById('kodateItems').innerHTML = kodateData.map(d=>
-    '<div class="item-row">' +
-    '<input type="checkbox" id="k_'+d.id+'" onchange="recalc()">' +
-    '<label class="item-label" for="k_'+d.id+'">'+d.label+'</label>' +
-    '<span class="item-price">'+fmt(d.price)+' 円</span>' +
-    '</div>'
-  ).join('');
+  document.getElementById('kodateItems').innerHTML =
+    '<div id="scaffold-notice" style="display:none;background:#fff8e1;border:1px solid #f9a825;border-radius:6px;padding:8px 12px;margin-bottom:.5rem;font-size:12px;color:#5c4a00">🏗️ <strong>足場設置費用 440,000円が自動加算されています</strong>（外壁・屋根同時施工の場合も足場は1回分）</div>' +
+    kodateData.map(d=>
+      '<div class="item-row">' +
+      '<input type="checkbox" id="k_'+d.id+'" onchange="recalc()">' +
+      '<label class="item-label" for="k_'+d.id+'">'+d.label+'</label>' +
+      '<span class="item-price">'+fmt(d.price)+' 円</span>' +
+      '</div>'
+    ).join('');
 }
 
 let otherCount = 3; // 初期表示件数
@@ -447,10 +459,30 @@ function recalc(){
   var add = 0;
   addData.forEach(function(g){ g.items.forEach(function(d){
     var el = document.getElementById('a_'+d.id);
-    if(el && el.checked){ var q = d.qty ? Math.max(1, getNum('q_'+d.id,1)) : 1; add += d.price*q; }
+    if(el && el.checked){
+      var q = d.qty ? Math.max(1, getNum('q_'+d.id,1)) : 1;
+      add += d.price*q;
+    }
   }); });
+  // 戸建て専用工事
   if(currentTab==='kodate'){
-    kodateData.forEach(function(d){ var el=document.getElementById('k_'+d.id); if(el&&el.checked) add+=d.price; });
+    var hasGaiheki = false, hasYane = false;
+    kodateData.forEach(function(d){
+      var el=document.getElementById('k_'+d.id);
+      if(el&&el.checked){
+        add+=d.price;
+        if(d.id==='e01') hasGaiheki=true;
+        if(d.id==='e02') hasYane=true;
+      }
+    });
+    // 外壁・屋根のどちらか選択時は足場を自動加算（両方でも1回）
+    var scaffoldAdd = (hasGaiheki || hasYane) ? SCAFFOLD_PRICE : 0;
+    add += scaffoldAdd;
+    var scaffoldEl = document.getElementById('scaffold-notice');
+    if(scaffoldEl) scaffoldEl.style.display = scaffoldAdd > 0 ? 'block' : 'none';
+  } else {
+    var scaffoldEl = document.getElementById('scaffold-notice');
+    if(scaffoldEl) scaffoldEl.style.display = 'none';
   }
   for(var i=1;i<=otherCount;i++){
     var el=document.getElementById('ot_'+i); if(el&&el.checked) add+=getNum('oprice_'+i,0);
@@ -581,10 +613,22 @@ function goToEstimate(){
 
   if(currentTab==='kodate'){
     var hk=false;
+    var estGaiheki=false, estYane=false;
     kodateData.forEach(function(d){ var el=document.getElementById('k_'+d.id); if(el&&el.checked){
       if(!hk){ rows+='<tr class="sec"><td colspan="5">■ 戸建て専用工事</td></tr>'; hk=true; }
       tr(d.label,1,'式',d.price,d.price,false,false); addTotal+=d.price;
+      if(d.id==='e01') estGaiheki=true;
+      if(d.id==='e02') estYane=true;
     }});
+    // 足場自動加算
+    if(estGaiheki || estYane){
+      var scaffoldLabel = (estGaiheki && estYane)
+        ? '足場設置費用（施工面積200㎡まで）※外壁・屋根同時施工のため1回'
+        : '足場設置費用（施工面積200㎡まで）';
+      if(!hk){ rows+='<tr class="sec"><td colspan="5">■ 戸建て専用工事</td></tr>'; }
+      tr(scaffoldLabel,1,'式',SCAFFOLD_PRICE,SCAFFOLD_PRICE,false,true);
+      addTotal+=SCAFFOLD_PRICE;
+    }
   }
 
   var ho=false;
