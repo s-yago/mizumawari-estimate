@@ -101,7 +101,7 @@ tr:nth-child(even) td{background:#f8f8f8}
     <div class="toc-title">📌 目次</div>
     <a href="#ch1">第1章　このツールの目的と位置づけ</a>
     <a href="#ch2">第2章　基本操作（5ステップ）</a>
-    <a href="#ch3">第3章　設備除外時のルールと計算ロジック</a>
+    <a href="#ch3">第3章　設備除外時のルールと計算ロジック（足場自動加算含む）</a>
     <a href="#ch4">第4章　お客様対応トークスクリプト</a>
     <a href="#ch5">第5章　よくある質問（Q&amp;A）</a>
   </div>
@@ -209,8 +209,8 @@ tr:nth-child(even) td{background:#f8f8f8}
         <tr><th>除外設備</th><th>マンション</th><th>戸建て</th></tr>
         <tr><td>ユニットバス（タカラスタンダード・リラクシア）</td><td class="td-red">▲1,139,000円</td><td class="td-red">▲1,019,000円</td></tr>
         <tr><td>キッチン（タカラスタンダード・グレーシア）</td><td class="td-red">▲774,200円</td><td class="td-red">▲774,200円</td></tr>
-        <tr><td>トイレ（TOTO・ウォシュレット）</td><td class="td-red">▲209,000円</td><td class="td-red">▲209,000円</td></tr>
-        <tr><td>洗面台（タカラスタンダード・オンディーヌ）</td><td class="td-red">▲208,000円</td><td class="td-red">▲208,000円</td></tr>
+        <tr><td>トイレ（TOTO・ウォシュレット付 ZR1）</td><td class="td-red">▲209,000円</td><td class="td-red">▲209,000円</td></tr>
+        <tr><td>洗面台（タカラスタンダード・リフレシオ）</td><td class="td-red">▲208,000円</td><td class="td-red">▲208,000円</td></tr>
         <tr><td>洗面CF ※UB＋洗面台の両方除外時のみ</td><td class="td-red">▲42,000円</td><td class="td-red">▲42,000円</td></tr>
       </table>
 
@@ -224,6 +224,29 @@ tr:nth-child(even) td{background:#f8f8f8}
       </table>
       <div class="box-note">
         📌 3点・4点除外は単品注文扱いとなり、パックの対象外となります。
+      </div>
+
+      <h2>3-3　戸建て専用工事（外構・外装）</h2>
+      <p>戸建てタブ選択時のみ、以下の工事が「戸建て専用工事」の中に表示されます。マンションでは表示されません。</p>
+      <table>
+        <tr><th>工事名</th><th>金額</th><th>備考</th></tr>
+        <tr><td>外壁塗装</td><td class="td-blue">1,540,000円</td><td>施工面積200㎡まで</td></tr>
+        <tr><td>屋根塗装</td><td class="td-blue">450,000円</td><td>施工面積70㎡まで</td></tr>
+        <tr><td>カーポート設置</td><td class="td-blue">1,100,000円</td><td>2台分・積雪1.5mタイプ</td></tr>
+        <tr><td>床下白アリ防除施工</td><td class="td-blue">200,000円</td><td>施工面積20坪まで</td></tr>
+      </table>
+
+      <h3>■ 足場設置費用の自動加算について</h3>
+      <p>外壁塗装・屋根塗装のどちらか、または両方にチェックを入れると、<strong>足場設置費用 440,000円が自動的に加算</strong>されます。</p>
+      <table>
+        <tr><th>選択状況</th><th>足場費用</th></tr>
+        <tr><td>外壁塗装のみ選択</td><td class="td-blue">+440,000円（自動加算）</td></tr>
+        <tr><td>屋根塗装のみ選択</td><td class="td-blue">+440,000円（自動加算）</td></tr>
+        <tr><td>外壁＋屋根の両方選択</td><td class="td-blue">+440,000円（同時施工のため1回分のみ）</td></tr>
+        <tr><td>カーポート・白アリのみ選択</td><td>足場加算なし</td></tr>
+      </table>
+      <div class="box-note">
+        📌 外壁・屋根を選択すると入力画面に「🏗️ 足場設置費用440,000円が自動加算されています」というお知らせが表示されます。見積書にも足場行が自動で追記されます。
       </div>
     </div>
   </div>
