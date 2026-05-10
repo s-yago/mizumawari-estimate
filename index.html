@@ -285,9 +285,9 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
       <div style="font-size:13px;font-weight:700;color:#333;margin:.6rem 0 .3rem">■ 足場設置費用の自動加算</div>
       <table style="width:100%;border-collapse:collapse;font-size:12px;margin:.5rem 0">
         <tr><th style="background:#185FA5;color:#fff;padding:6px 8px;text-align:left">選択状況</th><th style="background:#185FA5;color:#fff;padding:6px 8px">足場費用</th></tr>
-        <tr><td style="padding:5px 8px;border-bottom:1px solid #eee">外壁塗装のみ選択</td><td style="padding:5px 8px;border-bottom:1px solid #eee;color:#185FA5;font-weight:700">+440,000円（自動加算）</td></tr>
-        <tr style="background:#f8f8f8"><td style="padding:5px 8px;border-bottom:1px solid #eee">屋根塗装のみ選択</td><td style="padding:5px 8px;border-bottom:1px solid #eee;color:#185FA5;font-weight:700">+440,000円（自動加算）</td></tr>
-        <tr><td style="padding:5px 8px;border-bottom:1px solid #eee">外壁＋屋根 両方選択</td><td style="padding:5px 8px;border-bottom:1px solid #eee;color:#185FA5;font-weight:700">+440,000円（同時施工のため1回分）</td></tr>
+        <tr><td style="padding:5px 8px;border-bottom:1px solid #eee">外壁塗装のみ選択</td><td style="padding:5px 8px;border-bottom:1px solid #eee;color:#185FA5;font-weight:700">+500,000円（自動加算）</td></tr>
+        <tr style="background:#f8f8f8"><td style="padding:5px 8px;border-bottom:1px solid #eee">屋根塗装のみ選択</td><td style="padding:5px 8px;border-bottom:1px solid #eee;color:#185FA5;font-weight:700">+500,000円（自動加算）</td></tr>
+        <tr><td style="padding:5px 8px;border-bottom:1px solid #eee">外壁＋屋根 両方選択</td><td style="padding:5px 8px;border-bottom:1px solid #eee;color:#185FA5;font-weight:700">+500,000円（同時施工のため1回分）</td></tr>
         <tr style="background:#f8f8f8"><td style="padding:5px 8px">カーポート・白アリのみ選択</td><td style="padding:5px 8px">加算なし</td></tr>
       </table>
     </div>
@@ -358,7 +358,7 @@ const CONFIG = {
 // ペナルティ：除外点数→割引解消額
 const PENALTY = { 0: 0, 1: 100000, 2: 200000 };
 // 足場設置費用（外壁・屋根塗装のどちらか1つでも選択時に自動加算）
-const SCAFFOLD_PRICE = 440000;
+const SCAFFOLD_PRICE = 500000;
 
 // 減額データ（税抜）  mansion/kodate で金額が異なる場合は別指定
 const deductData = [
@@ -472,8 +472,8 @@ const addData = [
 const kodateData = [
   {id:'k01', label:'2階トイレ追加工事', price:209000},
   {id:'k02', label:'階段床上貼り工事（CF）', price:70000},
-  {id:'e01', label:'外壁塗装（施工面積200㎡まで）', price:1540000},
-  {id:'e02', label:'屋根塗装（施工面積70㎡まで）', price:450000},
+  {id:'e01', label:'外壁塗装（施工面積200㎡まで）', price:1235000},
+  {id:'e02', label:'屋根塗装（施工面積70㎡まで）', price:400000},
   {id:'e03', label:'カーポート設置（2台分・積雪1.5mタイプ）', price:1000000},
   {id:'e04', label:'床下白アリ防除施工（施工面積20坪まで）', price:200000},
 ];
@@ -530,7 +530,7 @@ function toggleAccordion(id){
 
 function buildKodateItems(){
   document.getElementById('kodateItems').innerHTML =
-    '<div id="scaffold-notice" style="display:none;background:#fff8e1;border:1px solid #f9a825;border-radius:6px;padding:8px 12px;margin-bottom:.5rem;font-size:12px;color:#5c4a00">🏗️ <strong>足場設置費用 440,000円が自動加算されています</strong>（外壁・屋根同時施工の場合も足場は1回分）</div>' +
+    '<div id="scaffold-notice" style="display:none;background:#fff8e1;border:1px solid #f9a825;border-radius:6px;padding:8px 12px;margin-bottom:.5rem;font-size:12px;color:#5c4a00">🏗️ <strong>足場設置費用 500,000円が自動加算されています</strong>（外壁・屋根同時施工の場合も足場は1回分）</div>' +
     kodateData.map(d=>
       '<div class="item-row">' +
       '<input type="checkbox" id="k_'+d.id+'" onchange="recalc()">' +
