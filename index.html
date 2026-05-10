@@ -120,8 +120,9 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
 <body>
 <div class="app">
   <h1 class="no-print">💧 水回りリフォーム 見積もりシステム</h1>
-  <div class="no-print" style="text-align:right;margin-bottom:.75rem">
-    <a href="manual.html" style="display:inline-block;background:#fff;color:#185FA5;border:2px solid #185FA5;border-radius:8px;padding:8px 18px;font-size:13px;font-weight:700;text-decoration:none" target="_blank">📋 営業マニュアルを見る</a>
+  <div class="no-print" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;flex-wrap:wrap;gap:.5rem">
+    <button onclick="goToSaved()" style="background:#fff;color:#2e7d32;border:2px solid #2e7d32;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer">📂 保存した見積もり一覧</button>
+    <button onclick="goToManual()" style="background:#fff;color:#185FA5;border:2px solid #185FA5;border-radius:8px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer">📋 営業マニュアルを見る</button>
   </div>
 
   <!-- 入力ページ -->
@@ -186,10 +187,165 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
 
   <!-- 見積書ページ -->
   <div class="page" id="page-estimate">
-    <button class="btn-back" onclick="goBack()">← 入力画面に戻る</button>
+    <button class="btn-back no-print" onclick="goBack()">← 入力画面に戻る</button>
     <div class="card est-result" id="estimateHTML"></div>
+    <div class="no-print" style="display:flex;flex-direction:column;gap:.5rem;margin-top:.5rem">
+      <button class="btn-print" onclick="window.print()">🖨️ 印刷 / PDF保存</button>
+      <button onclick="saveEstimate()" style="width:100%;padding:12px;background:#2e7d32;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer">💾 この見積もりを保存する</button>
+      <button class="btn-back" onclick="goBack()">← 入力画面に戻る</button>
+    </div>
+  </div>
+
+  <!-- 保存済み見積もり一覧ページ -->
+  <div class="page" id="page-saved">
+    <button class="btn-back no-print" onclick="goBack()" style="margin-bottom:1rem">← 入力画面に戻る</button>
+    <div class="card" style="margin-bottom:1rem">
+      <div style="font-size:15px;font-weight:700;color:#185FA5;margin-bottom:.75rem">📂 保存した見積もり一覧</div>
+      <div id="saved-list"></div>
+      <div id="saved-empty" style="text-align:center;color:#999;padding:2rem;font-size:13px;display:none">保存された見積もりはありません</div>
+    </div>
     <button class="btn-back" onclick="goBack()">← 入力画面に戻る</button>
-    <button class="btn-print" onclick="window.print()">🖨️ 印刷 / PDF保存</button>
+  </div>
+
+  <!-- マニュアルページ -->
+  <div class="page" id="page-manual">
+    <button class="btn-back no-print" onclick="goBack()" style="margin-bottom:1rem">← 入力画面に戻る</button>
+
+    <!-- 目次 -->
+    <div class="card" style="margin-bottom:1rem">
+      <div style="font-size:12px;font-weight:700;color:#185FA5;margin-bottom:.5rem">📌 目次</div>
+      <a href="#m-ch1" style="display:block;font-size:13px;color:#185FA5;text-decoration:none;padding:3px 0;border-bottom:1px dotted #eee">第1章　このツールの目的と位置づけ</a>
+      <a href="#m-ch2" style="display:block;font-size:13px;color:#185FA5;text-decoration:none;padding:3px 0;border-bottom:1px dotted #eee">第2章　基本操作（5ステップ）</a>
+      <a href="#m-ch3" style="display:block;font-size:13px;color:#185FA5;text-decoration:none;padding:3px 0;border-bottom:1px dotted #eee">第3章　設備除外時のルールと計算ロジック（足場自動加算含む）</a>
+      <a href="#m-ch4" style="display:block;font-size:13px;color:#185FA5;text-decoration:none;padding:3px 0;border-bottom:1px dotted #eee">第4章　お客様対応トークスクリプト</a>
+      <a href="#m-ch5" style="display:block;font-size:13px;color:#185FA5;text-decoration:none;padding:3px 0">第5章　よくある質問（Q&amp;A）</a>
+    </div>
+
+    <!-- 第1章 -->
+    <div class="card" id="m-ch1" style="margin-bottom:1rem">
+      <div style="background:#185FA5;color:#fff;padding:.75rem 1rem;margin:-0.875rem -1rem .875rem;border-radius:9px 9px 0 0;font-size:15px;font-weight:700">第1章　このツールの目的と位置づけ</div>
+      <div style="font-size:14px;font-weight:700;color:#185FA5;margin:.8rem 0 .4rem;padding-bottom:.3rem;border-bottom:2px solid #EBF3FC">1-1　ツールの目的</div>
+      <p style="font-size:13px;margin-bottom:.4rem">本ツールは以下の2つの目的で使用します。</p>
+      <ul style="padding-left:1.2rem;font-size:13px;margin-bottom:.75rem">
+        <li>お客様が水回りリフォームの<strong>予算概算を把握</strong>するため</li>
+        <li>請負契約前の<strong>銀行融資審査</strong>に必要な概算見積書を作成するため</li>
+      </ul>
+      <div style="background:#fff0f0;border-left:4px solid #c62828;border-radius:0 6px 6px 0;padding:.75rem 1rem;font-size:13px;color:#7a0000;margin-bottom:.75rem">
+        ⚠️ <strong>重要：</strong>このツールで作成した見積書は「概算」です。請負契約後に正式な金額を計算します。追加工事がなければ基本的にこの金額で確定となりますが、現地調査の結果、想定外の補修費用が発生する場合があります。
+      </div>
+      <div style="font-size:14px;font-weight:700;color:#185FA5;margin:.8rem 0 .4rem;padding-bottom:.3rem;border-bottom:2px solid #EBF3FC">1-2　概算見積と正式見積の違い</div>
+      <table style="width:100%;border-collapse:collapse;font-size:12px;margin:.5rem 0">
+        <tr><th style="background:#185FA5;color:#fff;padding:6px 8px;text-align:left">項目</th><th style="background:#185FA5;color:#fff;padding:6px 8px">概算見積（本ツール）</th><th style="background:#185FA5;color:#fff;padding:6px 8px">正式見積（契約後）</th></tr>
+        <tr><td style="padding:5px 8px;border-bottom:1px solid #eee">タイミング</td><td style="padding:5px 8px;border-bottom:1px solid #eee">契約前・銀行審査時</td><td style="padding:5px 8px;border-bottom:1px solid #eee">現地調査後・請負契約時</td></tr>
+        <tr style="background:#f8f8f8"><td style="padding:5px 8px;border-bottom:1px solid #eee">精度</td><td style="padding:5px 8px;border-bottom:1px solid #eee">概算（想定外費用込み）</td><td style="padding:5px 8px;border-bottom:1px solid #eee">確定金額</td></tr>
+        <tr><td style="padding:5px 8px;border-bottom:1px solid #eee">用途</td><td style="padding:5px 8px;border-bottom:1px solid #eee">予算計画・融資申請</td><td style="padding:5px 8px;border-bottom:1px solid #eee">請負契約・施工</td></tr>
+        <tr style="background:#f8f8f8"><td style="padding:5px 8px">想定外費用</td><td style="padding:5px 8px">30%バッファ込み</td><td style="padding:5px 8px">調査結果を反映</td></tr>
+      </table>
+    </div>
+
+    <!-- 第2章 -->
+    <div class="card" id="m-ch2" style="margin-bottom:1rem">
+      <div style="background:#185FA5;color:#fff;padding:.75rem 1rem;margin:-0.875rem -1rem .875rem;border-radius:9px 9px 0 0;font-size:15px;font-weight:700">第2章　基本操作（5ステップ）</div>
+      <div style="font-size:14px;font-weight:700;color:#185FA5;margin:.8rem 0 .4rem;padding-bottom:.3rem;border-bottom:2px solid #EBF3FC">2-1　操作手順</div>
+      <div id="m-steps" style="display:flex;flex-direction:column;gap:.5rem;margin:.5rem 0">
+        <div style="display:flex;gap:.75rem;align-items:flex-start"><div style="background:#185FA5;color:#fff;font-weight:700;font-size:13px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0">①</div><div><div style="font-weight:700;font-size:13px;color:#185FA5">物件タイプを選択</div><div style="font-size:12px;color:#555">「マンション」または「戸建て」タブを選ぶ。パック価格が自動で切り替わります（マンション310万円 / 戸建て300万円）</div></div></div>
+        <div style="display:flex;gap:.75rem;align-items:flex-start"><div style="background:#185FA5;color:#fff;font-weight:700;font-size:13px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0">②</div><div><div style="font-weight:700;font-size:13px;color:#185FA5">基本情報を入力</div><div style="font-size:12px;color:#555">お客様名・物件住所（任意）・担当者名を入力</div></div></div>
+        <div style="display:flex;gap:.75rem;align-items:flex-start"><div style="background:#185FA5;color:#fff;font-weight:700;font-size:13px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0">③</div><div><div style="font-weight:700;font-size:13px;color:#185FA5">除外設備を選択</div><div style="font-size:12px;color:#555">不要な設備にチェック。減額とパック施工割引調整額が自動計算されます</div></div></div>
+        <div style="display:flex;gap:.75rem;align-items:flex-start"><div style="background:#185FA5;color:#fff;font-weight:700;font-size:13px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0">④</div><div><div style="font-weight:700;font-size:13px;color:#185FA5">追加工事を選択</div><div style="font-size:12px;color:#555">壁紙・床・オプション等、ご希望の追加工事にチェック。数量入力が必要な項目は箇所数を入力</div></div></div>
+        <div style="display:flex;gap:.75rem;align-items:flex-start"><div style="background:#185FA5;color:#fff;font-weight:700;font-size:13px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0">⑤</div><div><div style="font-weight:700;font-size:13px;color:#185FA5">見積書を作成</div><div style="font-size:12px;color:#555">「見積書を作成する」ボタンを押すと見積書画面へ。印刷またはPDF保存が可能</div></div></div>
+      </div>
+      <div style="font-size:14px;font-weight:700;color:#185FA5;margin:.8rem 0 .4rem;padding-bottom:.3rem;border-bottom:2px solid #EBF3FC">2-2　概算総額の計算式</div>
+      <div style="background:#EBF3FC;border-left:4px solid #185FA5;border-radius:0 6px 6px 0;padding:.75rem 1rem;font-size:13px;color:#0d3b6e">
+        概算総額 ＝（パック価格 − 除外設備減額 ＋ パック施工割引調整額 ＋ 追加工事費）×（1 ＋ 予備費率）
+      </div>
+    </div>
+
+    <!-- 第3章 -->
+    <div class="card" id="m-ch3" style="margin-bottom:1rem">
+      <div style="background:#185FA5;color:#fff;padding:.75rem 1rem;margin:-0.875rem -1rem .875rem;border-radius:9px 9px 0 0;font-size:15px;font-weight:700">第3章　設備除外時のルールと計算ロジック</div>
+      <div style="font-size:14px;font-weight:700;color:#185FA5;margin:.8rem 0 .4rem;padding-bottom:.3rem;border-bottom:2px solid #EBF3FC">3-1　設備除外時の減額金額</div>
+      <table id="m-deduct-table" style="width:100%;border-collapse:collapse;font-size:12px;margin:.5rem 0">
+        <tr><th style="background:#185FA5;color:#fff;padding:6px 8px;text-align:left">除外設備</th><th style="background:#185FA5;color:#fff;padding:6px 8px">マンション</th><th style="background:#185FA5;color:#fff;padding:6px 8px">戸建て</th></tr>
+      </table>
+      <div style="font-size:14px;font-weight:700;color:#185FA5;margin:.8rem 0 .4rem;padding-bottom:.3rem;border-bottom:2px solid #EBF3FC">3-2　パック施工割引 調整額ルール</div>
+      <table style="width:100%;border-collapse:collapse;font-size:12px;margin:.5rem 0">
+        <tr><th style="background:#185FA5;color:#fff;padding:6px 8px;text-align:left">除外点数</th><th style="background:#185FA5;color:#fff;padding:6px 8px">割引調整額</th><th style="background:#185FA5;color:#fff;padding:6px 8px">残り割引</th><th style="background:#185FA5;color:#fff;padding:6px 8px">状態</th></tr>
+        <tr><td style="padding:5px 8px;border-bottom:1px solid #eee">0点（4点フルセット）</td><td style="padding:5px 8px;border-bottom:1px solid #eee;color:#2e7d32;font-weight:700">0円</td><td style="padding:5px 8px;border-bottom:1px solid #eee;color:#2e7d32;font-weight:700">▲200,000円</td><td style="padding:5px 8px;border-bottom:1px solid #eee">最大割引</td></tr>
+        <tr style="background:#f8f8f8"><td style="padding:5px 8px;border-bottom:1px solid #eee">1点除外（3点施工）</td><td style="padding:5px 8px;border-bottom:1px solid #eee;color:#A32D2D;font-weight:700">+100,000円</td><td style="padding:5px 8px;border-bottom:1px solid #eee">▲100,000円</td><td style="padding:5px 8px;border-bottom:1px solid #eee">割引半減</td></tr>
+        <tr><td style="padding:5px 8px">2点以上除外</td><td style="padding:5px 8px;color:#A32D2D;font-weight:700">+200,000円</td><td style="padding:5px 8px;color:#A32D2D;font-weight:700">0円</td><td style="padding:5px 8px">割引対象外</td></tr>
+      </table>
+      <div style="background:#fffde7;border-left:4px solid #f9a825;border-radius:0 6px 6px 0;padding:.75rem 1rem;font-size:13px;color:#5c4a00;margin:.5rem 0">
+        📌 3点・4点除外は単品注文扱いとなり、パックの対象外となります。
+      </div>
+      <div style="font-size:14px;font-weight:700;color:#185FA5;margin:.8rem 0 .4rem;padding-bottom:.3rem;border-bottom:2px solid #EBF3FC">3-3　戸建て専用工事（外構・外装）</div>
+      <p style="font-size:13px;margin-bottom:.5rem">戸建てタブ選択時のみ表示されます。マンションでは表示されません。</p>
+      <table id="m-exterior-table" style="width:100%;border-collapse:collapse;font-size:12px;margin:.5rem 0">
+        <tr><th style="background:#185FA5;color:#fff;padding:6px 8px;text-align:left">工事名</th><th style="background:#185FA5;color:#fff;padding:6px 8px">金額</th><th style="background:#185FA5;color:#fff;padding:6px 8px">備考</th></tr>
+      </table>
+      <div style="font-size:13px;font-weight:700;color:#333;margin:.6rem 0 .3rem">■ 足場設置費用の自動加算</div>
+      <table style="width:100%;border-collapse:collapse;font-size:12px;margin:.5rem 0">
+        <tr><th style="background:#185FA5;color:#fff;padding:6px 8px;text-align:left">選択状況</th><th style="background:#185FA5;color:#fff;padding:6px 8px">足場費用</th></tr>
+        <tr><td style="padding:5px 8px;border-bottom:1px solid #eee">外壁塗装のみ選択</td><td style="padding:5px 8px;border-bottom:1px solid #eee;color:#185FA5;font-weight:700">+440,000円（自動加算）</td></tr>
+        <tr style="background:#f8f8f8"><td style="padding:5px 8px;border-bottom:1px solid #eee">屋根塗装のみ選択</td><td style="padding:5px 8px;border-bottom:1px solid #eee;color:#185FA5;font-weight:700">+440,000円（自動加算）</td></tr>
+        <tr><td style="padding:5px 8px;border-bottom:1px solid #eee">外壁＋屋根 両方選択</td><td style="padding:5px 8px;border-bottom:1px solid #eee;color:#185FA5;font-weight:700">+440,000円（同時施工のため1回分）</td></tr>
+        <tr style="background:#f8f8f8"><td style="padding:5px 8px">カーポート・白アリのみ選択</td><td style="padding:5px 8px">加算なし</td></tr>
+      </table>
+    </div>
+
+    <!-- 第4章 -->
+    <div class="card" id="m-ch4" style="margin-bottom:1rem">
+      <div style="background:#185FA5;color:#fff;padding:.75rem 1rem;margin:-0.875rem -1rem .875rem;border-radius:9px 9px 0 0;font-size:15px;font-weight:700">第4章　お客様対応トークスクリプト</div>
+      <div style="font-size:14px;font-weight:700;color:#185FA5;margin:.8rem 0 .4rem;padding-bottom:.3rem;border-bottom:2px solid #EBF3FC">4-1　ツールの説明トーク</div>
+      <div style="margin:.5rem 0"><div style="display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px 4px 0 0;background:#185FA5;color:#fff">営業</div><div style="padding:.75rem 1rem;border-radius:0 6px 6px 6px;font-size:13px;line-height:1.8;background:#EBF3FC;border:1px solid #B5D4F4;white-space:pre-wrap">○○様、こちらのタブレット（スマホ）でリフォームの概算費用をすぐにお出しできます。
+「マンション」か「戸建て」かを選んで、ご希望の内容にチェックを入れるだけで、銀行の融資審査にも使える概算見積書を作成できます。
+今日その場でお持ち帰りいただけますよ。</div></div>
+      <div style="font-size:14px;font-weight:700;color:#185FA5;margin:.8rem 0 .4rem;padding-bottom:.3rem;border-bottom:2px solid #EBF3FC">4-2　概算見積であることの説明</div>
+      <div style="margin:.5rem 0"><div style="display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px 4px 0 0;background:#185FA5;color:#fff">営業</div><div style="padding:.75rem 1rem;border-radius:0 6px 6px 6px;font-size:13px;line-height:1.8;background:#EBF3FC;border:1px solid #B5D4F4;white-space:pre-wrap">こちらの金額は、あくまでも予算の目安と銀行審査用の概算金額です。
+請負契約のあとに現地をしっかり確認して、正式な金額をお出しします。
+
+追加の工事がなければ基本的にこの金額でご契約となりますが、壁の中や床下など、開けてみて初めてわかる状況によって費用が変わる場合があります。
+そのため、今回は安心のため想定外費用として30%分を上乗せした金額でお出ししています。</div></div>
+      <div style="font-size:14px;font-weight:700;color:#185FA5;margin:.8rem 0 .4rem;padding-bottom:.3rem;border-bottom:2px solid #EBF3FC">4-3　設備1点除外時のトーク</div>
+      <p style="font-size:12px;color:#777;margin-bottom:.4rem">【シーン：キッチンを外したい場合】</p>
+      <div style="margin:.5rem 0"><div style="display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px 4px 0 0;background:#555;color:#fff">お客様</div><div style="padding:.75rem 1rem;border-radius:0 6px 6px 6px;font-size:13px;line-height:1.8;background:#f5f5f5;border:1px solid #ddd">キッチンはリフォームしなくてもいいんだけど、その分安くなりますよね？</div></div>
+      <div style="margin:.5rem 0"><div style="display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px 4px 0 0;background:#185FA5;color:#fff">営業</div><div style="padding:.75rem 1rem;border-radius:0 6px 6px 6px;font-size:13px;line-height:1.8;background:#EBF3FC;border:1px solid #B5D4F4;white-space:pre-wrap">はい、キッチンを外す場合は、キッチン分の工事費用 774,200円を全額お値引きします。
+
+ただ、一点ご説明があります。今回の「水回り4点パック」は、同じ職人が4つの設備を一度にまとめて工事することで、養生や段取りを1回で済ませられるため、会社から特別に20万円のパック施工割引を適用しています。
+
+キッチンが1点外れますと、この割引がシステム上自動で調整され、20万円の割引が10万円になってしまいます。
+
+結果として、当初のお見積り（300万円）から674,200円のお値引きとなります。
+「私が値引きを減らしたのではなく、パックのシステム上、割引率が自動で変わってしまう」という仕組みですので、ご理解いただけますと幸いです。</div></div>
+      <div style="font-size:14px;font-weight:700;color:#185FA5;margin:.8rem 0 .4rem;padding-bottom:.3rem;border-bottom:2px solid #EBF3FC">4-4　2点以上除外時のトーク</div>
+      <div style="margin:.5rem 0"><div style="display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px 4px 0 0;background:#555;color:#fff">お客様</div><div style="padding:.75rem 1rem;border-radius:0 6px 6px 6px;font-size:13px;line-height:1.8;background:#f5f5f5;border:1px solid #ddd">キッチンと洗面台は外してほしいんですけど。</div></div>
+      <div style="margin:.5rem 0"><div style="display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px 4px 0 0;background:#185FA5;color:#fff">営業</div><div style="padding:.75rem 1rem;border-radius:0 6px 6px 6px;font-size:13px;line-height:1.8;background:#EBF3FC;border:1px solid #B5D4F4;white-space:pre-wrap">承知しました。キッチン774,200円と洗面台166,000円を合わせて940,200円を減額いたします。
+
+2点以上外れる場合は、まとめ工事の効率が大きく変わるため、システム上パック施工割引20万円が調整対象外となってしまいます。
+
+そのため当初のお見積りから実質740,200円のお値引きとなります。
+2点外してもお得なプランには変わりありませんので、ご安心ください。</div></div>
+      <div style="font-size:14px;font-weight:700;color:#185FA5;margin:.8rem 0 .4rem;padding-bottom:.3rem;border-bottom:2px solid #EBF3FC">4-5　予備費について質問されたときのトーク</div>
+      <div style="margin:.5rem 0"><div style="display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px 4px 0 0;background:#555;color:#fff">お客様</div><div style="padding:.75rem 1rem;border-radius:0 6px 6px 6px;font-size:13px;line-height:1.8;background:#f5f5f5;border:1px solid #ddd">この30%っていうのは何ですか？多くない？</div></div>
+      <div style="margin:.5rem 0"><div style="display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px 4px 0 0;background:#185FA5;color:#fff">営業</div><div style="padding:.75rem 1rem;border-radius:0 6px 6px 6px;font-size:13px;line-height:1.8;background:#EBF3FC;border:1px solid #B5D4F4;white-space:pre-wrap">ご説明が足りず失礼しました。
+リフォーム工事は、壁を開けたり床をはがしたりすると、図面には載っていない配管の老朽化や、下地の腐食が見つかることがあります。
+
+今回の概算見積は請負契約前の段階ですので、まだ現地を詳しく確認できていません。
+そのため「万が一の際も銀行融資の金額が足りなくならないよう」に、想定外費用として30%を上乗せした金額でお出ししています。
+
+実際に追加費用が発生しなければ、その分はお戻しいたします。また現地確認後の正式見積で、より精度の高い金額をお出しします。</div></div>
+    </div>
+
+    <!-- 第5章 -->
+    <div class="card" id="m-ch5" style="margin-bottom:1rem">
+      <div style="background:#185FA5;color:#fff;padding:.75rem 1rem;margin:-0.875rem -1rem .875rem;border-radius:9px 9px 0 0;font-size:15px;font-weight:700">第5章　よくある質問（Q&amp;A）</div>
+      <div style="margin:.75rem 0;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden"><div style="background:#EBF3FC;padding:.6rem 1rem;font-size:13px;font-weight:700;color:#0d3b6e">Q. 見積書は印刷できますか？</div><div style="padding:.6rem 1rem;font-size:13px">A. はい。見積書画面の「印刷 / PDF保存」ボタンから印刷またはPDFとして保存できます。</div></div>
+      <div style="margin:.75rem 0;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden"><div style="background:#EBF3FC;padding:.6rem 1rem;font-size:13px;font-weight:700;color:#0d3b6e">Q. スマートフォンでも使えますか？</div><div style="padding:.6rem 1rem;font-size:13px">A. はい。スマートフォン・タブレット・PCすべてに対応しています。</div></div>
+      <div style="margin:.75rem 0;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden"><div style="background:#EBF3FC;padding:.6rem 1rem;font-size:13px;font-weight:700;color:#0d3b6e">Q. 予備費の30%は変更できますか？</div><div style="padding:.6rem 1rem;font-size:13px">A. はい。入力画面の概算合計欄にある「30%」の数字を直接変更できます。</div></div>
+      <div style="margin:.75rem 0;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden"><div style="background:#EBF3FC;padding:.6rem 1rem;font-size:13px;font-weight:700;color:#0d3b6e">Q. この見積書は正式な契約書として使えますか？</div><div style="padding:.6rem 1rem;font-size:13px">A. 使えません。あくまでも概算見積書です。正式な請負契約は現地調査後に改めてご締結いただきます。</div></div>
+      <div style="margin:.75rem 0;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden"><div style="background:#EBF3FC;padding:.6rem 1rem;font-size:13px;font-weight:700;color:#0d3b6e">Q. 戸建てとマンションで金額が違うのはなぜですか？</div><div style="padding:.6rem 1rem;font-size:13px">A. ユニットバスの機種（マンション用と戸建て用で価格が異なる）や、クリーニング費用の違いが主な理由です。</div></div>
+    </div>
+
+    <button class="btn-back no-print" onclick="goBack()">← 入力画面に戻る</button>
   </div>
 </div>
 
@@ -213,7 +369,7 @@ const deductData = [
 ];
 
 // 洗面CF：S と UB 両方除外時のみ減額
-const CF_PRICE = { mansion: 42000, kodate: 42000 };
+const CF_PRICE = { mansion: 50000, kodate: 50000 };
 
 let currentTab = 'mansion';
 function getConfig(){ return CONFIG[currentTab]; }
@@ -246,7 +402,7 @@ const packDetail = [
   ]},
   { cat:'内装工事', items:[
     { label:'洗面室クロス貼り換え', mansion: 50000, kodate: 50000, tag:'UB'    },
-    { label:'洗面CF貼り替え',       mansion: 42000, kodate: 42000, tag:'SandUB'},
+    { label:'洗面CF貼り替え',       mansion: 50000, kodate: 50000, tag:'SandUB'},
     { label:'トイレCF貼り替え',     mansion: 36000, kodate: 36000, tag:'T'     },
   ]},
   { cat:'設備工事', items:[
@@ -506,8 +662,190 @@ function recalc(){
 }
 
 function goBack(){
-  document.getElementById('page-input').classList.add('active');
   document.getElementById('page-estimate').classList.remove('active');
+  document.getElementById('page-manual').classList.remove('active');
+  document.getElementById('page-saved').classList.remove('active');
+  document.getElementById('page-input').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ─── 見積もり保存・読込・複写 ────────────────────────────
+function getFormState(){
+  var state = {
+    tab: currentTab,
+    customerName: document.getElementById('customerName').value,
+    address: document.getElementById('address').value,
+    staffName: document.getElementById('staffName').value,
+    bufRate: document.getElementById('bufRate').value,
+    deduct: {}, add: {}, qty: {}, kodate: {}, others: []
+  };
+  deductData.forEach(function(d){
+    var el = document.getElementById('d_'+d.id);
+    if(el) state.deduct[d.id] = el.checked;
+  });
+  addData.forEach(function(g){ g.items.forEach(function(d){
+    var el = document.getElementById('a_'+d.id);
+    if(el) state.add[d.id] = el.checked;
+    if(d.qty){ var qel = document.getElementById('q_'+d.id); if(qel) state.qty[d.id] = qel.value; }
+  }); });
+  kodateData.forEach(function(d){
+    var el = document.getElementById('k_'+d.id);
+    if(el) state.kodate[d.id] = el.checked;
+  });
+  for(var i=1; i<=otherCount; i++){
+    var oel = document.getElementById('ot_'+i);
+    state.others.push({
+      checked: oel ? oel.checked : false,
+      name: document.getElementById('oname_'+i) ? document.getElementById('oname_'+i).value : '',
+      price: document.getElementById('oprice_'+i) ? document.getElementById('oprice_'+i).value : '0'
+    });
+  }
+  return state;
+}
+
+function applyFormState(state){
+  if(state.tab) setTab(state.tab);
+  if(state.customerName !== undefined) document.getElementById('customerName').value = state.customerName;
+  if(state.address !== undefined) document.getElementById('address').value = state.address;
+  if(state.staffName !== undefined) document.getElementById('staffName').value = state.staffName;
+  if(state.bufRate !== undefined) document.getElementById('bufRate').value = state.bufRate;
+  deductData.forEach(function(d){
+    var el = document.getElementById('d_'+d.id);
+    if(el && state.deduct) el.checked = !!state.deduct[d.id];
+  });
+  addData.forEach(function(g){ g.items.forEach(function(d){
+    var el = document.getElementById('a_'+d.id);
+    if(el && state.add) el.checked = !!state.add[d.id];
+    if(d.qty && state.qty && state.qty[d.id]){ var qel = document.getElementById('q_'+d.id); if(qel) qel.value = state.qty[d.id]; }
+  }); });
+  kodateData.forEach(function(d){
+    var el = document.getElementById('k_'+d.id);
+    if(el && state.kodate) el.checked = !!state.kodate[d.id];
+  });
+  if(state.others && state.others.length){
+    // その他工事を必要数まで増やす
+    while(otherCount < state.others.length) addOtherRow();
+    state.others.forEach(function(o, i){
+      var idx = i+1;
+      var oel = document.getElementById('ot_'+idx);
+      if(oel){ oel.checked = o.checked; }
+      var nel = document.getElementById('oname_'+idx);
+      if(nel) nel.value = o.name;
+      var pel = document.getElementById('oprice_'+idx);
+      if(pel) pel.value = o.price;
+    });
+  }
+  recalc();
+}
+
+function saveEstimate(){
+  var state = getFormState();
+  var name = state.customerName || '名前なし';
+  var saved = JSON.parse(localStorage.getItem('vivi_estimates') || '[]');
+  var entry = {
+    id: Date.now(),
+    name: name,
+    tab: state.tab === 'kodate' ? '戸建て' : 'マンション',
+    date: new Date().toLocaleDateString('ja-JP'),
+    total: document.getElementById('t-total').textContent,
+    state: state
+  };
+  saved.unshift(entry); // 新しい順
+  localStorage.setItem('vivi_estimates', JSON.stringify(saved));
+  alert('「'+name+'」様の見積もりを保存しました！');
+}
+
+function goToSaved(){
+  var saved = JSON.parse(localStorage.getItem('vivi_estimates') || '[]');
+  var listEl = document.getElementById('saved-list');
+  var emptyEl = document.getElementById('saved-empty');
+  if(saved.length === 0){
+    listEl.innerHTML = '';
+    emptyEl.style.display = 'block';
+  } else {
+    emptyEl.style.display = 'none';
+    listEl.innerHTML = saved.map(function(e){
+      return '<div style="border:1px solid #e0e0e0;border-radius:8px;padding:.75rem 1rem;margin-bottom:.5rem;background:#fff">' +
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.5rem">' +
+        '<div>' +
+        '<div style="font-size:14px;font-weight:700;color:#185FA5">'+e.name+' 様</div>' +
+        '<div style="font-size:12px;color:#888;margin-top:2px">'+e.tab+' ／ '+e.date+' ／ '+e.total+'</div>' +
+        '</div>' +
+        '<div style="display:flex;gap:.5rem;flex-wrap:wrap">' +
+        '<button onclick="loadEstimate('+e.id+')" style="padding:6px 12px;background:#185FA5;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">📥 読み込む</button>' +
+        '<button onclick="copyEstimate('+e.id+')" style="padding:6px 12px;background:#fff;color:#185FA5;border:2px solid #185FA5;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">📋 複写して新規</button>' +
+        '<button onclick="deleteEstimate('+e.id+')" style="padding:6px 12px;background:#fff;color:#c62828;border:2px solid #c62828;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">🗑️ 削除</button>' +
+        '</div></div></div>';
+    }).join('');
+  }
+  document.getElementById('page-input').classList.remove('active');
+  document.getElementById('page-estimate').classList.remove('active');
+  document.getElementById('page-manual').classList.remove('active');
+  document.getElementById('page-saved').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function loadEstimate(id){
+  var saved = JSON.parse(localStorage.getItem('vivi_estimates') || '[]');
+  var entry = saved.find(function(e){ return e.id === id; });
+  if(!entry) return;
+  applyFormState(entry.state);
+  document.getElementById('page-saved').classList.remove('active');
+  document.getElementById('page-input').classList.add('active');
+  window.scrollTo(0,0);
+  alert('「'+entry.name+'」様の見積もりを読み込みました。');
+}
+
+function copyEstimate(id){
+  var saved = JSON.parse(localStorage.getItem('vivi_estimates') || '[]');
+  var entry = saved.find(function(e){ return e.id === id; });
+  if(!entry) return;
+  var newState = JSON.parse(JSON.stringify(entry.state));
+  newState.customerName = ''; // お客様名だけリセット
+  applyFormState(newState);
+  document.getElementById('page-saved').classList.remove('active');
+  document.getElementById('page-input').classList.add('active');
+  window.scrollTo(0,0);
+  alert('「'+entry.name+'」様の見積もりを複写しました。\nお客様名を変更して新しい見積もりを作成してください。');
+}
+
+function deleteEstimate(id){
+  if(!confirm('この見積もりを削除してよいですか？')) return;
+  var saved = JSON.parse(localStorage.getItem('vivi_estimates') || '[]');
+  saved = saved.filter(function(e){ return e.id !== id; });
+  localStorage.setItem('vivi_estimates', JSON.stringify(saved));
+  goToSaved(); // 一覧を更新
+}
+
+
+  // 減額テーブルをデータから動的生成
+  var deductTbl = document.getElementById('m-deduct-table');
+  if(deductTbl){
+    deductTbl.innerHTML = '<tr><th style="background:#185FA5;color:#fff;padding:6px 8px;text-align:left">除外設備</th><th style="background:#185FA5;color:#fff;padding:6px 8px">マンション</th><th style="background:#185FA5;color:#fff;padding:6px 8px">戸建て</th></tr>' +
+      deductData.map(function(d,i){ return '<tr'+(i%2?' style="background:#f8f8f8"':'')+'>'+
+        '<td style="padding:5px 8px;border-bottom:1px solid #eee">'+d.label+'</td>'+
+        '<td style="padding:5px 8px;border-bottom:1px solid #eee;color:#A32D2D;font-weight:700">▲'+fmt(d.mansion)+'円</td>'+
+        '<td style="padding:5px 8px;border-bottom:1px solid #eee;color:#A32D2D;font-weight:700">▲'+fmt(d.kodate)+'円</td>'+
+        '</tr>'; }).join('') +
+      '<tr style="background:#f8f8f8"><td style="padding:5px 8px">洗面CF（UB＋洗面台の両方除外時のみ）</td>'+
+      '<td style="padding:5px 8px;color:#A32D2D;font-weight:700">▲'+fmt(CF_PRICE.mansion)+'円</td>'+
+      '<td style="padding:5px 8px;color:#A32D2D;font-weight:700">▲'+fmt(CF_PRICE.kodate)+'円</td></tr>';
+  }
+  // 外装テーブルをデータから動的生成
+  var extTbl = document.getElementById('m-exterior-table');
+  if(extTbl){
+    var extNotes = {'e01':'施工面積200㎡まで','e02':'施工面積70㎡まで','e03':'2台分・積雪1.5mタイプ','e04':'施工面積20坪まで'};
+    extTbl.innerHTML = '<tr><th style="background:#185FA5;color:#fff;padding:6px 8px;text-align:left">工事名</th><th style="background:#185FA5;color:#fff;padding:6px 8px">金額</th><th style="background:#185FA5;color:#fff;padding:6px 8px">備考</th></tr>' +
+      kodateData.filter(function(d){ return ['e01','e02','e03','e04'].includes(d.id); })
+      .map(function(d,i){ return '<tr'+(i%2?' style="background:#f8f8f8"':'')+'>'+
+        '<td style="padding:5px 8px;border-bottom:1px solid #eee">'+d.label+'</td>'+
+        '<td style="padding:5px 8px;border-bottom:1px solid #eee;color:#185FA5;font-weight:700">'+fmt(d.price)+'円</td>'+
+        '<td style="padding:5px 8px;border-bottom:1px solid #eee">'+(extNotes[d.id]||'')+'</td>'+
+        '</tr>'; }).join('');
+  }
+  document.getElementById('page-input').classList.remove('active');
+  document.getElementById('page-estimate').classList.remove('active');
+  document.getElementById('page-manual').classList.add('active');
   window.scrollTo(0,0);
 }
 
