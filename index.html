@@ -443,17 +443,17 @@ const addData = [
     {id:'w11', label:'洋室（〜10帖）の壁紙張り替え', price:120000, qty:true, unit:'部屋'},
     {id:'w12', label:'洋室（〜12帖）の壁紙張り替え', price:140000, qty:true, unit:'部屋'},
   ]},
-  {group:'床張り替え（フロアタイル上貼り）※フローリング希望は別途見積り', items:[
-    {id:'f01', label:'キッチンの床の上貼り', price:100000, qty:false},
-    {id:'f02', label:'玄関・廊下の床の上貼り（12㎡まで）', price:150000, qty:false},
-    {id:'f03', label:'リビング（〜10帖）の上貼り', price:250000, qty:false},
-    {id:'f04', label:'リビング（〜14帖）の上貼り', price:350000, qty:false},
-    {id:'f05', label:'リビング（〜16帖）の上貼り', price:400000, qty:false},
-    {id:'f06', label:'リビング（〜20帖）の上貼り', price:500000, qty:false},
-    {id:'f07', label:'洋室（〜6帖）の上貼り', price:150000, qty:true, unit:'部屋'},
-    {id:'f08', label:'洋室（〜8帖）の上貼り', price:200000, qty:true, unit:'部屋'},
-    {id:'f09', label:'洋室（〜10帖）の上貼り', price:250000, qty:true, unit:'部屋'},
-    {id:'f10', label:'洋室（〜12帖）の上貼り', price:300000, qty:true, unit:'部屋'},
+  {group:'床張り替え', items:[
+    {id:'f01', label:'キッチンの床の上貼り', mansion:100000, kodate:110000, qty:false},
+    {id:'f02', label:'玄関・廊下の床の上貼り（12㎡まで）', mansion:150000, kodate:170000, qty:false},
+    {id:'f03', label:'リビング（〜10帖）の上貼り', mansion:250000, kodate:250000, qty:false},
+    {id:'f04', label:'リビング（〜14帖）の上貼り', mansion:350000, kodate:350000, qty:false},
+    {id:'f05', label:'リビング（〜16帖）の上貼り', mansion:400000, kodate:400000, qty:false},
+    {id:'f06', label:'リビング（〜20帖）の上貼り', mansion:500000, kodate:500000, qty:false},
+    {id:'f07', label:'洋室（〜6帖）の上貼り', mansion:150000, kodate:150000, qty:true, unit:'部屋'},
+    {id:'f08', label:'洋室（〜8帖）の上貼り', mansion:200000, kodate:200000, qty:true, unit:'部屋'},
+    {id:'f09', label:'洋室（〜10帖）の上貼り', mansion:250000, kodate:250000, qty:true, unit:'部屋'},
+    {id:'f10', label:'洋室（〜12帖）の上貼り', mansion:300000, kodate:300000, qty:true, unit:'部屋'},
   ]},
   {group:'その他オプション', items:[
     {id:'o01a', label:'内窓の設置（大）', price:200000, qty:true, unit:'箇所'},
@@ -506,22 +506,32 @@ function buildDeductItems(){
 }
 
 function buildAddItems(){
+  var tab = currentTab;
   document.getElementById('addItems').innerHTML = addData.map(function(g){
+    // 床グループはタブによってグループ名を変える
+    var groupLabel = g.group;
+    if(g.group === '床張り替え'){
+      groupLabel = tab === 'kodate'
+        ? '床張り替え（フローリング床上貼り）※フロアタイル希望は別途見積り'
+        : '床張り替え（フロアタイル上貼り）※フローリング希望は別途見積り';
+    }
     var id = 'acc_' + g.group.replace(/[^\w]/g,'_');
     var itemsHtml = g.items.map(function(d){
+      // mansion/kodate両方持つ項目はタブに応じた金額を使用
+      var price = (d.mansion !== undefined) ? d[tab] : d.price;
       var qtyHtml = d.qty
         ? '<div class="item-qty"><input type="number" id="q_'+d.id+'" value="1" min="1" max="20" onchange="recalc()"><span>'+(d.unit||'部屋')+'</span></div>'
         : '';
       return '<div class="item-row">' +
         '<input type="checkbox" id="a_'+d.id+'" onchange="recalc()">' +
         '<label class="item-label" for="a_'+d.id+'">'+d.label+'</label>' +
-        '<span class="item-price">'+fmt(d.price)+' 円</span>' +
+        '<span class="item-price">'+fmt(price)+' 円</span>' +
         qtyHtml +
         '</div>';
     }).join('');
     return '<div class="accordion">' +
       '<div class="accordion-header" onclick="toggleAccordion(\''+id+'\')" id="hd_'+id+'">' +
-      g.group +
+      groupLabel +
       '<span class="accordion-arrow">▼</span>' +
       '</div>' +
       '<div class="accordion-body" id="'+id+'">'+itemsHtml+'</div>' +
@@ -584,6 +594,7 @@ function setTab(tab){
     kodateData.forEach(function(d){ var el=document.getElementById('k_'+d.id); if(el) el.checked=false; });
   }
   buildDeductItems(); // 減額金額をタブに合わせて更新
+  buildAddItems();    // 床金額・グループ名をタブに合わせて更新
   recalc();
 }
 
@@ -625,8 +636,9 @@ function recalc(){
   addData.forEach(function(g){ g.items.forEach(function(d){
     var el = document.getElementById('a_'+d.id);
     if(el && el.checked){
+      var price = (d.mansion !== undefined) ? d[tab] : d.price;
       var q = d.qty ? Math.max(1, getNum('q_'+d.id,1)) : 1;
-      add += d.price*q;
+      add += price*q;
     }
   }); });
   // 戸建て専用工事
@@ -999,10 +1011,17 @@ function goToEstimate(){
   var addH={};
   addData.forEach(function(g){ g.items.forEach(function(d){
     var el=document.getElementById('a_'+d.id); if(el&&el.checked){
-      if(!addH[g.group]){ rows+='<tr class="sec"><td colspan="5">■ 追加工事：'+g.group+'</td></tr>'; addH[g.group]=true; }
+      var groupLabel = g.group;
+      if(g.group==='床張り替え'){
+        groupLabel = tab==='kodate'
+          ? '床張り替え（フローリング床上貼り）'
+          : '床張り替え（フロアタイル上貼り）';
+      }
+      if(!addH[groupLabel]){ rows+='<tr class="sec"><td colspan="5">■ 追加工事：'+groupLabel+'</td></tr>'; addH[groupLabel]=true; }
+      var price = (d.mansion !== undefined) ? d[tab] : d.price;
       var q=d.qty?Math.max(1,getNum('q_'+d.id,1)):1;
-      var sub=d.price*q;
-      tr(d.label,q,d.unit||'部屋',d.price,sub,false,false); addTotal+=sub;
+      var sub=price*q;
+      tr(d.label,q,d.unit||'部屋',price,sub,false,false); addTotal+=sub;
     }
   }); });
 
