@@ -295,7 +295,7 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
         <tr><td style="padding:5px 8px;border-bottom:1px solid #eee">外壁塗装のみ選択</td><td style="padding:5px 8px;border-bottom:1px solid #eee;color:#185FA5;font-weight:700">+500,000円（自動加算）</td></tr>
         <tr style="background:#f8f8f8"><td style="padding:5px 8px;border-bottom:1px solid #eee">屋根塗装のみ選択</td><td style="padding:5px 8px;border-bottom:1px solid #eee;color:#185FA5;font-weight:700">+500,000円（自動加算）</td></tr>
         <tr><td style="padding:5px 8px;border-bottom:1px solid #eee">外壁＋屋根 両方選択</td><td style="padding:5px 8px;border-bottom:1px solid #eee;color:#185FA5;font-weight:700">+500,000円（同時施工のため1回分）</td></tr>
-        <tr style="background:#f8f8f8"><td style="padding:5px 8px">カーポート・白アリのみ選択</td><td style="padding:5px 8px">加算なし</td></tr>
+        <tr style="background:#f8f8f8"><td style="padding:5px 8px">カーポート・シロアリのみ選択</td><td style="padding:5px 8px">加算なし</td></tr>
       </table>
     </div>
 
@@ -350,6 +350,8 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
       <div style="margin:.75rem 0;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden"><div style="background:#EBF3FC;padding:.6rem 1rem;font-size:13px;font-weight:700;color:#0d3b6e">Q. 予備費の30%は変更できますか？</div><div style="padding:.6rem 1rem;font-size:13px">A. はい。入力画面の概算合計欄にある「30%」の数字を直接変更できます。</div></div>
       <div style="margin:.75rem 0;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden"><div style="background:#EBF3FC;padding:.6rem 1rem;font-size:13px;font-weight:700;color:#0d3b6e">Q. この見積書は正式な契約書として使えますか？</div><div style="padding:.6rem 1rem;font-size:13px">A. 使えません。あくまでも概算見積書です。正式な請負契約は現地調査後に改めてご締結いただきます。</div></div>
       <div style="margin:.75rem 0;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden"><div style="background:#EBF3FC;padding:.6rem 1rem;font-size:13px;font-weight:700;color:#0d3b6e">Q. 戸建てとマンションで金額が違うのはなぜですか？</div><div style="padding:.6rem 1rem;font-size:13px">A. ユニットバスの機種（マンション用と戸建て用で価格が異なる）や、クリーニング費用の違いが主な理由です。</div></div>
+      <div style="margin:.75rem 0;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden"><div style="background:#EBF3FC;padding:.6rem 1rem;font-size:13px;font-weight:700;color:#0d3b6e">Q. 他の部署やスタッフに見積もりを共有できますか？</div><div style="padding:.6rem 1rem;font-size:13px">A. はい。見積書ページの「📤 ファイルで書き出す」ボタンでJSONファイルをダウンロードし、LINEやメールで送れます。受け取った側は「📂 保存した見積もり一覧」の「📥 ファイルから読み込む」ボタンで内容を再現できます。</div></div>
+      <div style="margin:.75rem 0;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden"><div style="background:#EBF3FC;padding:.6rem 1rem;font-size:13px;font-weight:700;color:#0d3b6e">Q. 他の人の見積もりをたたき台にして編集できますか？</div><div style="padding:.6rem 1rem;font-size:13px">A. はい。「📋 複写して新規」ボタンを使うと、入力内容をそのまま引き継いでお客様名だけリセットした状態で編集できます。</div></div>
     </div>
 
     <button class="btn-back no-print" onclick="goBack()">← 入力画面に戻る</button>
@@ -889,7 +891,7 @@ function goToManual(){
   // 外装テーブルをデータから動的生成
   var extTbl = document.getElementById('m-exterior-table');
   if(extTbl){
-    var extNotes = {'e01':'施工面積200㎡まで','e02':'施工面積70㎡まで','e03':'2台分・積雪1.5mタイプ','e04':'施工面積20坪まで'};
+    var extNotes = {'e01':'施工面積200㎡まで','e02':'施工面積70㎡まで','e03':'2台分・積雪1.5mタイプ','e04':'70㎡まで'};
     extTbl.innerHTML = '<tr><th style="background:#185FA5;color:#fff;padding:6px 8px;text-align:left">工事名</th><th style="background:#185FA5;color:#fff;padding:6px 8px">金額</th><th style="background:#185FA5;color:#fff;padding:6px 8px">備考</th></tr>' +
       kodateData.filter(function(d){ return ['e01','e02','e03','e04'].includes(d.id); })
       .map(function(d,i){ return '<tr'+(i%2?' style="background:#f8f8f8"':'')+'>'+
