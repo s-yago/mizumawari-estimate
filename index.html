@@ -467,14 +467,17 @@ const addData = [
     {id:'o07',  label:'換気扇交換（洗面室・トイレ）※2又は3室換気の場合は別途見積り', price:35000, qty:true, unit:'箇所'},
   ]},
   {group:'キッチンオプション', items:[
-    {id:'p01', label:'キッチン IHコンロ設置（※ブレーカー増設の場合は別途見積り）', price:60000, qty:false},
-    {id:'p02', label:'キッチン ビルトイン食洗機（キッチン交換時のみ）', price:150000, qty:false},
+    {id:'p01', label:'キッチン IHコンロ設置（※ブレーカー増設の場合は別途見積り）', price:60000, qty:false, alert:true},
+    {id:'p02', label:'キッチン ビルトイン食洗機（キッチン交換時のみ）', price:150000, qty:false, alert:true},
     {id:'p03', label:'キッチン 吊戸棚', price:80000, qty:false},
     {id:'p04', label:'キッチン キャビネット（W1800タイプ）', price:350000, qty:false},
   ]},
   {group:'ユニットバスオプション', items:[
-    {id:'p05', label:'浴室暖房乾燥機（UB交換時のみ）', price:200000, qty:false},
+    {id:'p05', label:'浴室暖房乾燥機（UB交換時のみ）', price:200000, qty:false, alert:true},
     {id:'p06', label:'ユニットバス 1.25坪タイプ交換（既存が1.25坪の場合の追加費用）', price:50000, qty:false},
+  ]},
+  {group:'給湯・設備オプション', items:[
+    {id:'p07', label:'エコキュート（370L）設置（ガス給湯機工事費に加算）', price:300000, qty:false, alert:true},
   ]},
 ];
 
@@ -524,7 +527,7 @@ function buildAddItems(){
         : '';
       return '<div class="item-row">' +
         '<input type="checkbox" id="a_'+d.id+'" onchange="recalc()">' +
-        '<label class="item-label" for="a_'+d.id+'">'+d.label+'</label>' +
+        '<label class="item-label" for="a_'+d.id+'" style="'+(d.alert?'color:#A32D2D;font-weight:700':'')+'">'+d.label+'</label>' +
         '<span class="item-price">'+fmt(price)+' 円</span>' +
         qtyHtml +
         '</div>';
