@@ -512,8 +512,8 @@ function buildAddItems(){
     var groupLabel = g.group;
     if(g.group === '床張り替え'){
       groupLabel = tab === 'kodate'
-        ? '床張り替え（フローリング床上貼り）※フロアタイル希望は別途見積り'
-        : '床張り替え（フロアタイル上貼り）※フローリング希望は別途見積り';
+        ? '床張り替え（フローリング床上貼り）※現状が絨毯やカーペットなどで下地調整が必要な場合は別途費用が掛かります。'
+        : '床張り替え（フロアタイル上貼り）※フローリング床希望または現状が絨毯やカーペットなどで下地調整が必要な場合は別途費用が掛かります。';
     }
     var id = 'acc_' + g.group.replace(/[^\w]/g,'_');
     var itemsHtml = g.items.map(function(d){
@@ -1061,7 +1061,19 @@ function goToEstimate(){
   var buf = Math.round(net*bufRate);
   var total = net+buf;
 
+  // 床工事チェック確認
+  var hasFloor = addData.find(function(g){ return g.group==='床張り替え'; }).items.some(function(d){
+    var el = document.getElementById('a_'+d.id); return el && el.checked;
+  });
+
   var notes='<p>建物の状況によって追加工事が必要になる場合があります。</p><p>電気温水器・エコキュート（370ℓ）使用の場合、約30万円の追加費用が発生します。</p>';
+  if(hasFloor){
+    if(tab==='kodate'){
+      notes+='<p>床張り替え工事について：現状が絨毯やカーペットなどで下地調整が必要な場合は、別途費用が掛かります。事前に現地確認をさせていただきます。</p>';
+    } else {
+      notes+='<p>床張り替え工事について：フローリング床へのご変更、または現状が絨毯やカーペットなどで下地調整が必要な場合は、別途費用が掛かります。事前に現地確認をさせていただきます。</p>';
+    }
+  }
   if(excludeCount>0) notes+='<p>設備除外によりパック割引の一部または全部が解消されています。詳細は担当スタッフにご確認ください。</p>';
   if(currentTab==='mansion') notes+='<p>マンションでのフローリング張替工事は、管理規約によりLL-45等級などの防音フローリングの使用が義務付けられている場合があり、別途工事費用がかかる場合があります。</p>';
 
