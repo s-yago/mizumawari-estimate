@@ -145,7 +145,7 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
       <div class="base-pack">
         <div class="base-pack-title">基本パック（ベース金額）</div>
         <div class="base-pack-amount" id="basePackAmount">3,100,000 円</div>
-        <div class="base-pack-note">水回り設備4点（UB・キッチン・洗面台・トイレ）、床CF、ハウスクリーニング込み（諸経費込）</div>
+        <div class="base-pack-note">水回り設備4点（UB・キッチン・洗面台・トイレ）、床CF、ハウスクリーニング、設計・コーディネート費込み（諸経費込）</div>
       </div>
 
       <div class="card">
@@ -361,8 +361,8 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
 <script>
 // ─── 設定値 ───────────────────────────────────────────────
 const CONFIG = {
-  mansion: { listPrice: 3300000, packDiscount: 200000 },
-  kodate:  { listPrice: 3200000, packDiscount: 200000 },
+  mansion: { listPrice: 3500000, packDiscount: 200000 },
+  kodate:  { listPrice: 3400000, packDiscount: 200000 },
 };
 // ペナルティ：除外点数→割引解消額
 const PENALTY = { 0: 0, 1: 100000, 2: 200000 };
@@ -424,6 +424,7 @@ const packDetail = [
     { label:'室内クリーニング', mansion: 50000, kodate: 79100, tag:'固定'},
     { label:'事務所経費',       mansion: 60000, kodate: 60000, tag:'固定'},
     { label:'現場管理費',       mansion: 80000, kodate: 80000, tag:'固定'},
+    { label:'設計・コーディネート費', mansion: 200000, kodate: 200000, tag:'固定'},
   ]},
 ];
 
