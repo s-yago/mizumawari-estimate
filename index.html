@@ -292,9 +292,9 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
       <div style="font-size:13px;font-weight:700;color:#333;margin:.6rem 0 .3rem">■ 足場設置費用の自動加算</div>
       <table style="width:100%;border-collapse:collapse;font-size:12px;margin:.5rem 0">
         <tr><th style="background:#185FA5;color:#fff;padding:6px 8px;text-align:left">選択状況</th><th style="background:#185FA5;color:#fff;padding:6px 8px">足場費用</th></tr>
-        <tr><td style="padding:5px 8px;border-bottom:1px solid #eee">外壁塗装のみ選択</td><td style="padding:5px 8px;border-bottom:1px solid #eee;color:#185FA5;font-weight:700">+500,000円（自動加算）</td></tr>
-        <tr style="background:#f8f8f8"><td style="padding:5px 8px;border-bottom:1px solid #eee">屋根塗装のみ選択</td><td style="padding:5px 8px;border-bottom:1px solid #eee;color:#185FA5;font-weight:700">+500,000円（自動加算）</td></tr>
-        <tr><td style="padding:5px 8px;border-bottom:1px solid #eee">外壁＋屋根 両方選択</td><td style="padding:5px 8px;border-bottom:1px solid #eee;color:#185FA5;font-weight:700">+500,000円（同時施工のため1回分）</td></tr>
+        <tr><td style="padding:5px 8px;border-bottom:1px solid #eee">外壁塗装のみ選択</td><td style="padding:5px 8px;border-bottom:1px solid #eee;color:#185FA5;font-weight:700">+575,000円（自動加算）</td></tr>
+        <tr style="background:#f8f8f8"><td style="padding:5px 8px;border-bottom:1px solid #eee">屋根塗装のみ選択</td><td style="padding:5px 8px;border-bottom:1px solid #eee;color:#185FA5;font-weight:700">+575,000円（自動加算）</td></tr>
+        <tr><td style="padding:5px 8px;border-bottom:1px solid #eee">外壁＋屋根 両方選択</td><td style="padding:5px 8px;border-bottom:1px solid #eee;color:#185FA5;font-weight:700">+575,000円（同時施工のため1回分）</td></tr>
         <tr style="background:#f8f8f8"><td style="padding:5px 8px">カーポート・シロアリのみ選択</td><td style="padding:5px 8px">加算なし</td></tr>
       </table>
     </div>
@@ -367,7 +367,7 @@ const CONFIG = {
 // ペナルティ：除外点数→割引解消額
 const PENALTY = { 0: 0, 1: 100000, 2: 200000 };
 // 足場設置費用（外壁・屋根塗装のどちらか1つでも選択時に自動加算）
-const SCAFFOLD_PRICE = 500000;
+const SCAFFOLD_PRICE = 575000;
 
 // 減額データ（税抜）  mansion/kodate で金額が異なる場合は別指定
 const deductData = [
@@ -431,64 +431,64 @@ const packDetail = [
 
 const addData = [
   {group:'壁紙張り替え', items:[
-    {id:'w01', label:'洗面所の壁紙の張替え', price:57000, qty:false},
-    {id:'w02', label:'キッチンの壁紙の張替え', price:50000, qty:false},
-    {id:'w03', label:'トイレの壁紙の張替え', price:50000, qty:false},
-    {id:'w04', label:'玄関・廊下の壁紙張り替え（50㎡まで）', price:80000, qty:false},
-    {id:'w05', label:'リビング（〜10帖）の壁紙張り替え', price:120000, qty:false},
-    {id:'w06', label:'リビング（〜14帖）の壁紙張り替え', price:140000, qty:false},
-    {id:'w07', label:'リビング（〜16帖）の壁紙張り替え', price:160000, qty:false},
-    {id:'w08', label:'リビング（〜20帖）の壁紙張り替え', price:200000, qty:false},
-    {id:'w09', label:'洋室（〜6帖）の壁紙張り替え', price:80000, qty:true, unit:'部屋'},
-    {id:'w10', label:'洋室（〜8帖）の壁紙張り替え', price:100000, qty:true, unit:'部屋'},
-    {id:'w11', label:'洋室（〜10帖）の壁紙張り替え', price:120000, qty:true, unit:'部屋'},
-    {id:'w12', label:'洋室（〜12帖）の壁紙張り替え', price:140000, qty:true, unit:'部屋'},
+    {id:'w01', label:'洗面所の壁紙の張替え', price:65600, qty:false},
+    {id:'w02', label:'キッチンの壁紙の張替え', price:57500, qty:false},
+    {id:'w03', label:'トイレの壁紙の張替え', price:57500, qty:false},
+    {id:'w04', label:'玄関・廊下の壁紙張り替え（50㎡まで）', price:92000, qty:false},
+    {id:'w05', label:'リビング（〜10帖）の壁紙張り替え', price:138000, qty:false},
+    {id:'w06', label:'リビング（〜14帖）の壁紙張り替え', price:161000, qty:false},
+    {id:'w07', label:'リビング（〜16帖）の壁紙張り替え', price:184000, qty:false},
+    {id:'w08', label:'リビング（〜20帖）の壁紙張り替え', price:230000, qty:false},
+    {id:'w09', label:'洋室（〜6帖）の壁紙張り替え', price:92000, qty:true, unit:'部屋'},
+    {id:'w10', label:'洋室（〜8帖）の壁紙張り替え', price:115000, qty:true, unit:'部屋'},
+    {id:'w11', label:'洋室（〜10帖）の壁紙張り替え', price:138000, qty:true, unit:'部屋'},
+    {id:'w12', label:'洋室（〜12帖）の壁紙張り替え', price:161000, qty:true, unit:'部屋'},
   ]},
   {group:'床張り替え', items:[
-    {id:'f01', label:'キッチンの床の上貼り', mansion:100000, kodate:110000, qty:false},
-    {id:'f02', label:'玄関・廊下の床の上貼り（12㎡まで）', mansion:150000, kodate:170000, qty:false},
-    {id:'f03', label:'リビング（〜10帖）の上貼り', mansion:250000, kodate:250000, qty:false},
-    {id:'f04', label:'リビング（〜14帖）の上貼り', mansion:350000, kodate:350000, qty:false},
-    {id:'f05', label:'リビング（〜16帖）の上貼り', mansion:400000, kodate:400000, qty:false},
-    {id:'f06', label:'リビング（〜20帖）の上貼り', mansion:500000, kodate:500000, qty:false},
-    {id:'f07', label:'洋室（〜6帖）の上貼り', mansion:150000, kodate:150000, qty:true, unit:'部屋'},
-    {id:'f08', label:'洋室（〜8帖）の上貼り', mansion:200000, kodate:200000, qty:true, unit:'部屋'},
-    {id:'f09', label:'洋室（〜10帖）の上貼り', mansion:250000, kodate:250000, qty:true, unit:'部屋'},
-    {id:'f10', label:'洋室（〜12帖）の上貼り', mansion:300000, kodate:300000, qty:true, unit:'部屋'},
+    {id:'f01', label:'キッチンの床の上貼り', mansion:115000, kodate:126500, qty:false},
+    {id:'f02', label:'玄関・廊下の床の上貼り（12㎡まで）', mansion:172500, kodate:195500, qty:false},
+    {id:'f03', label:'リビング（〜10帖）の上貼り', mansion:287500, kodate:287500, qty:false},
+    {id:'f04', label:'リビング（〜14帖）の上貼り', mansion:402500, kodate:402500, qty:false},
+    {id:'f05', label:'リビング（〜16帖）の上貼り', mansion:460000, kodate:460000, qty:false},
+    {id:'f06', label:'リビング（〜20帖）の上貼り', mansion:575000, kodate:575000, qty:false},
+    {id:'f07', label:'洋室（〜6帖）の上貼り', mansion:172500, kodate:172500, qty:true, unit:'部屋'},
+    {id:'f08', label:'洋室（〜8帖）の上貼り', mansion:230000, kodate:230000, qty:true, unit:'部屋'},
+    {id:'f09', label:'洋室（〜10帖）の上貼り', mansion:287500, kodate:287500, qty:true, unit:'部屋'},
+    {id:'f10', label:'洋室（〜12帖）の上貼り', mansion:345000, kodate:345000, qty:true, unit:'部屋'},
   ]},
   {group:'その他オプション', items:[
-    {id:'o01a', label:'内窓の設置（大）', price:200000, qty:true, unit:'箇所'},
-    {id:'o01b', label:'内窓の設置（中）', price:120000, qty:true, unit:'箇所'},
-    {id:'o02a', label:'カーテンの設置（大）', price:80000, qty:true, unit:'箇所'},
-    {id:'o02b', label:'カーテンの設置（中）', price:50000, qty:true, unit:'箇所'},
-    {id:'o03',  label:'カーテンレールの設置', price:20000, qty:true, unit:'箇所'},
-    {id:'o04',  label:'玄関収納棚の設置（大）', price:300000, qty:false},
-    {id:'o05a', label:'コンセント移設（※クロス補修が必要な場合は別途見積り）', price:35000, qty:true, unit:'箇所'},
-    {id:'o05b', label:'コンセント増設（※クロス補修が必要な場合は別途見積り）', price:50000, qty:true, unit:'箇所'},
-    {id:'o07',  label:'換気扇交換（洗面室・トイレ）※2又は3室換気の場合は別途見積り', price:35000, qty:true, unit:'箇所'},
+    {id:'o01a', label:'内窓の設置（大）', price:230000, qty:true, unit:'箇所'},
+    {id:'o01b', label:'内窓の設置（中）', price:138000, qty:true, unit:'箇所'},
+    {id:'o02a', label:'カーテンの設置（大）', price:92000, qty:true, unit:'箇所'},
+    {id:'o02b', label:'カーテンの設置（中）', price:57500, qty:true, unit:'箇所'},
+    {id:'o03',  label:'カーテンレールの設置', price:23000, qty:true, unit:'箇所'},
+    {id:'o04',  label:'玄関収納棚の設置（大）', price:345000, qty:false},
+    {id:'o05a', label:'コンセント移設（※クロス補修が必要な場合は別途見積り）', price:40300, qty:true, unit:'箇所'},
+    {id:'o05b', label:'コンセント増設（※クロス補修が必要な場合は別途見積り）', price:57500, qty:true, unit:'箇所'},
+    {id:'o07',  label:'換気扇交換（洗面室・トイレ）※2又は3室換気の場合は別途見積り', price:40300, qty:true, unit:'箇所'},
   ]},
   {group:'キッチンオプション', items:[
-    {id:'p01', label:'キッチン IHコンロ設置（※ブレーカー増設の場合は別途見積り）', price:60000, qty:false, alert:true},
-    {id:'p02', label:'キッチン ビルトイン食洗機（キッチン交換時のみ）', price:150000, qty:false, alert:true},
-    {id:'p03', label:'キッチン 吊戸棚', price:80000, qty:false},
-    {id:'p04', label:'キッチン キャビネット（W1800タイプ）', price:350000, qty:false},
+    {id:'p01', label:'キッチン IHコンロ設置（※ブレーカー増設の場合は別途見積り）', price:69000, qty:false, alert:true},
+    {id:'p02', label:'キッチン ビルトイン食洗機（キッチン交換時のみ）', price:172500, qty:false, alert:true},
+    {id:'p03', label:'キッチン 吊戸棚', price:92000, qty:false},
+    {id:'p04', label:'キッチン キャビネット（W1800タイプ）', price:402500, qty:false},
   ]},
   {group:'ユニットバスオプション', items:[
-    {id:'p05', label:'浴室暖房乾燥機（UB交換時のみ）', price:200000, qty:false, alert:true},
-    {id:'p06', label:'ユニットバス 1.25坪タイプ交換（既存が1.25坪の場合の追加費用）', price:50000, qty:false},
+    {id:'p05', label:'浴室暖房乾燥機（UB交換時のみ）', price:230000, qty:false, alert:true},
+    {id:'p06', label:'ユニットバス 1.25坪タイプ交換（既存が1.25坪の場合の追加費用）', price:57500, qty:false},
   ]},
   {group:'給湯・設備オプション', items:[
-    {id:'p07', label:'エコキュート（370L）設置（ガス給湯機工事費に加算）', price:300000, qty:false, alert:true},
+    {id:'p07', label:'エコキュート（370L）設置（ガス給湯機工事費に加算）', price:345000, qty:false, alert:true},
   ]},
 ];
 
 const kodateData = [
-  {id:'k01', label:'2階トイレ追加工事', price:209000},
-  {id:'k02', label:'階段床上貼り工事（CF）', price:70000},
-  {id:'e01', label:'外壁塗装（施工面積200㎡まで）', price:1235000},
-  {id:'e02', label:'屋根塗装（施工面積70㎡まで）', price:400000},
-  {id:'e03', label:'カーポート設置（2台分・積雪1.5mタイプ）', price:1000000},
-  {id:'e04', label:'シロアリ防除費用（70㎡まで）', price:250000},
+  {id:'k01', label:'2階トイレ追加工事', price:240400},
+  {id:'k02', label:'階段床上貼り工事（CF）', price:80500},
+  {id:'e01', label:'外壁塗装（施工面積200㎡まで）', price:1420300},
+  {id:'e02', label:'屋根塗装（施工面積70㎡まで）', price:460000},
+  {id:'e03', label:'カーポート設置（2台分・積雪1.5mタイプ）', price:1150000},
+  {id:'e04', label:'シロアリ防除費用（70㎡まで）', price:287500},
 ];
 // 足場自動加算用IDリスト
 const kodateExteriorData = [
