@@ -144,7 +144,7 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
 
       <div class="base-pack">
         <div class="base-pack-title">基本パック（ベース金額）</div>
-        <div class="base-pack-amount" id="basePackAmount">3,100,000 円</div>
+        <div class="base-pack-amount" id="basePackAmount">3,350,000 円</div>
         <div class="base-pack-note">水回り設備4点（UB・キッチン・洗面台・トイレ）、床CF、ハウスクリーニング、設計・コーディネート費込み（諸経費込）</div>
       </div>
 
@@ -171,7 +171,7 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
     </div>
 
     <div class="totals">
-      <div class="total-row"><span>ベース工事費（パック価格）</span><span id="t-base">3,100,000 円</span></div>
+      <div class="total-row"><span>ベース工事費（パック価格）</span><span id="t-base">3,350,000 円</span></div>
       <div class="total-row"><span>不要設備 差し引き</span><span class="red" id="t-deduct">0 円</span></div>
       <div class="total-row"><span>パック施工割引 調整額</span><span class="red" id="t-penalty">0 円</span></div>
       <div class="total-row"><span>追加オプション工事費</span><span class="blue" id="t-add">0 円</span></div>
@@ -179,7 +179,7 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
         <span>想定外補修費用（<input type="number" id="bufRate" value="30" min="0" max="100" step="5" style="width:48px;font-size:13px;padding:2px 4px;border:1px solid #ddd;border-radius:4px;text-align:center" onchange="recalc()">%）</span>
         <span id="t-buf">0 円</span>
       </div>
-      <div class="total-row main"><span>概算総額（税込）</span><span class="amt" id="t-total">3,100,000 円</span></div>
+      <div class="total-row main"><span>概算総額（税込）</span><span class="amt" id="t-total">3,350,000 円</span></div>
     </div>
 
     <button class="btn-estimate" onclick="goToEstimate()">見積書を作成する →</button>
@@ -255,7 +255,7 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
       <div style="background:#185FA5;color:#fff;padding:.75rem 1rem;margin:-0.875rem -1rem .875rem;border-radius:9px 9px 0 0;font-size:15px;font-weight:700">第2章　基本操作（5ステップ）</div>
       <div style="font-size:14px;font-weight:700;color:#185FA5;margin:.8rem 0 .4rem;padding-bottom:.3rem;border-bottom:2px solid #EBF3FC">2-1　操作手順</div>
       <div id="m-steps" style="display:flex;flex-direction:column;gap:.5rem;margin:.5rem 0">
-        <div style="display:flex;gap:.75rem;align-items:flex-start"><div style="background:#185FA5;color:#fff;font-weight:700;font-size:13px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0">①</div><div><div style="font-weight:700;font-size:13px;color:#185FA5">物件タイプを選択</div><div style="font-size:12px;color:#555">「マンション」または「戸建て」タブを選ぶ。パック価格が自動で切り替わります（マンション310万円 / 戸建て300万円）</div></div></div>
+        <div style="display:flex;gap:.75rem;align-items:flex-start"><div style="background:#185FA5;color:#fff;font-weight:700;font-size:13px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0">①</div><div><div style="font-weight:700;font-size:13px;color:#185FA5">物件タイプを選択</div><div style="font-size:12px;color:#555">「マンション」または「戸建て」タブを選ぶ。パック価格が自動で切り替わります（マンション335万円 / 戸建て325万円）</div></div></div>
         <div style="display:flex;gap:.75rem;align-items:flex-start"><div style="background:#185FA5;color:#fff;font-weight:700;font-size:13px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0">②</div><div><div style="font-weight:700;font-size:13px;color:#185FA5">基本情報を入力</div><div style="font-size:12px;color:#555">お客様名・物件住所（任意）・担当者名を入力</div></div></div>
         <div style="display:flex;gap:.75rem;align-items:flex-start"><div style="background:#185FA5;color:#fff;font-weight:700;font-size:13px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0">③</div><div><div style="font-weight:700;font-size:13px;color:#185FA5">除外設備を選択</div><div style="font-size:12px;color:#555">不要な設備にチェック。減額とパック施工割引調整額が自動計算されます</div></div></div>
         <div style="display:flex;gap:.75rem;align-items:flex-start"><div style="background:#185FA5;color:#fff;font-weight:700;font-size:13px;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0">④</div><div><div style="font-weight:700;font-size:13px;color:#185FA5">追加工事を選択</div><div style="font-size:12px;color:#555">壁紙・床・オプション等、ご希望の追加工事にチェック。数量入力が必要な項目は箇所数を入力</div></div></div>
@@ -321,7 +321,7 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
 
 キッチンが1点外れますと、この割引がシステム上自動で調整され、20万円の割引が10万円になってしまいます。
 
-結果として、当初のお見積り（300万円）から674,200円のお値引きとなります。
+結果として、当初のお見積り（325万円）から674,200円のお値引きとなります。
 「私が値引きを減らしたのではなく、パックのシステム上、割引率が自動で変わってしまう」という仕組みですので、ご理解いただけますと幸いです。</div></div>
       <div style="font-size:14px;font-weight:700;color:#185FA5;margin:.8rem 0 .4rem;padding-bottom:.3rem;border-bottom:2px solid #EBF3FC">4-4　2点以上除外時のトーク</div>
       <div style="margin:.5rem 0"><div style="display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px 4px 0 0;background:#555;color:#fff">お客様</div><div style="padding:.75rem 1rem;border-radius:0 6px 6px 6px;font-size:13px;line-height:1.8;background:#f5f5f5;border:1px solid #ddd">キッチンと洗面台は外してほしいんですけど。</div></div>
@@ -360,9 +360,13 @@ h1{font-size:18px;font-weight:700;margin-bottom:1rem;color:#185FA5;text-align:ce
 
 <script>
 // ─── 設定値 ───────────────────────────────────────────────
+// お客様提示額（パック価格）＝ listPrice − packDiscount
+//   マンション：3,550,000 − 200,000 = 3,350,000（335万円）
+//   戸建て　　：3,450,000 − 200,000 = 3,250,000（325万円）
+// packDiscount は設備を抜いたときのパック割引調整額の計算に使うため変更しないこと
 const CONFIG = {
-  mansion: { listPrice: 3500000, packDiscount: 200000 },
-  kodate:  { listPrice: 3400000, packDiscount: 200000 },
+  mansion: { listPrice: 3550000, packDiscount: 200000 },
+  kodate:  { listPrice: 3450000, packDiscount: 200000 },
 };
 // ペナルティ：除外点数→割引解消額
 const PENALTY = { 0: 0, 1: 100000, 2: 200000 };
@@ -371,13 +375,14 @@ const SCAFFOLD_PRICE = 575000;
 
 // 減額データ（税抜）  mansion/kodate で金額が異なる場合は別指定
 const deductData = [
-  { id:'ub', label:'ユニットバス（タカラスタンダード・リラクシア）',   mansion:1139000, kodate:1019000, tag:'UB' },
+  { id:'ub', label:'ユニットバス（タカラスタンダード・リラクシア）',   mansion:1097000, kodate: 977000, tag:'UB' },
   { id:'kt', label:'キッチン（タカラスタンダード・グレーシア）',        mansion: 774200, kodate: 774200, tag:'K'  },
-  { id:'tl', label:'トイレ（TOTO・ウォシュレット付 ZR1）',             mansion: 209000, kodate: 209000, tag:'T'  },
+  { id:'tl', label:'トイレ（TOTO・ウォシュレット付 ZR1）',             mansion: 221000, kodate: 221000, tag:'T'  },
   { id:'ws', label:'洗面台（タカラスタンダード・リフレシオ）',          mansion: 166000, kodate: 166000, tag:'S'  },
 ];
 
-// 洗面CF：S と UB 両方除外時のみ減額
+// 洗面CF：UB と 洗面台(S) の両方を除外したときだけ、別枠でこの金額を減額する
+// （UB・洗面台それぞれの減額データにはCF分を含めない。含めると二重に引くことになる）
 const CF_PRICE = { mansion: 50000, kodate: 50000 };
 
 let currentTab = 'mansion';
@@ -417,7 +422,7 @@ const packDetail = [
   { cat:'設備工事', items:[
     { label:'システムキッチン（タカラスタンダード・グレーシア）',  mansion:498000, kodate:498000, tag:'K'  },
     { label:'システムバス（タカラスタンダード・リラクシア）',      mansion:697000, kodate:577000, tag:'UB' },
-    { label:'トイレ（TOTO・ウォシュレット付 ZR1）',                      mansion:113000, kodate:113000, tag:'T'  },
+    { label:'トイレ（TOTO・ウォシュレット付 ZR1）',                      mansion:125000, kodate:125000, tag:'T'  },
     { label:'洗面化粧台（タカラスタンダード・リフレシオ）',               mansion: 72000, kodate: 72000, tag:'S'  },
   ]},
   { cat:'その他・諸経費', items:[
@@ -480,10 +485,15 @@ const addData = [
   {group:'給湯・設備オプション', items:[
     {id:'p07', label:'エコキュート（370L）設置（ガス給湯機工事費に加算）', price:345000, qty:false, alert:true},
   ]},
+  {group:'エアコンオプション', items:[
+    {id:'ac06', label:'6帖エアコン設置', price:220000, qty:true, unit:'か所'},
+    {id:'ac10', label:'10帖エアコン設置', price:367000, qty:true, unit:'か所'},
+    {id:'ac18', label:'18帖エアコン設置', price:660000, qty:true, unit:'か所'},
+  ]},
 ];
 
 const kodateData = [
-  {id:'k01', label:'2階トイレ追加工事', price:240400},
+  {id:'k01', label:'2階トイレ追加工事', price:252400},
   {id:'k02', label:'階段床上貼り工事（CF）', price:80500},
   {id:'e01', label:'外壁塗装（施工面積200㎡まで）', price:1420300},
   {id:'e02', label:'屋根塗装（施工面積70㎡まで）', price:460000},
@@ -553,7 +563,7 @@ function toggleAccordion(id){
 
 function buildKodateItems(){
   document.getElementById('kodateItems').innerHTML =
-    '<div id="scaffold-notice" style="display:none;background:#fff8e1;border:1px solid #f9a825;border-radius:6px;padding:8px 12px;margin-bottom:.5rem;font-size:12px;color:#5c4a00">🏗️ <strong>足場設置費用 500,000円が自動加算されています</strong>（外壁・屋根同時施工の場合も足場は1回分）</div>' +
+    '<div id="scaffold-notice" style="display:none;background:#fff8e1;border:1px solid #f9a825;border-radius:6px;padding:8px 12px;margin-bottom:.5rem;font-size:12px;color:#5c4a00">🏗️ <strong>足場設置費用 '+fmt(SCAFFOLD_PRICE)+'円が自動加算されています</strong>（外壁・屋根同時施工の場合も足場は1回分）</div>' +
     kodateData.map(d=>
       '<div class="item-row">' +
       '<input type="checkbox" id="k_'+d.id+'" onchange="recalc()">' +
